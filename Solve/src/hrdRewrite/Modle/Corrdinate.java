@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class Corrdinate {
     private static final HashMap<Short,Corrdinate> coordinateCashe = new HashMap<>();
-
+    private int hashCode=Integer.MAX_VALUE;
     //减少对象的生成，缓存已经生成的对象
     public static Corrdinate getInstance(byte x,byte y){
         Short key= (short)(x << 8 | (y & 0xFF));
@@ -43,7 +43,10 @@ public class Corrdinate {
 
     @Override
     public int hashCode() {
-        return x_coordinate << 8 | (y_coordinate & 0xFFFFFF);
+        if (this.hashCode == Integer.MAX_VALUE ){
+            this.hashCode = x_coordinate << 8 | (y_coordinate & 0xFF);
+        }
+        return this.hashCode;
     }
 
     @Override

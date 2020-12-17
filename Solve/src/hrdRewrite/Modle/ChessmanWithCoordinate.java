@@ -25,7 +25,7 @@ public class ChessmanWithCoordinate {
     public static ChessmanWithCoordinate getInstance(Chessman chessman, Corrdinate corrdinate){
         HashMap<Corrdinate, ChessmanWithCoordinate> corrdinateMap = chessmanCashe.get(chessman);
         ChessmanWithCoordinate chessmanWithCoordinate;
-        if (corrdinate  == null){
+        if (corrdinateMap  == null){
             corrdinateMap = new HashMap<Corrdinate,ChessmanWithCoordinate>();
             chessmanCashe.put(chessman,corrdinateMap);
             chessmanWithCoordinate = new ChessmanWithCoordinate(chessman,corrdinate);
@@ -56,9 +56,19 @@ public class ChessmanWithCoordinate {
     public byte getYcoordinate(){
         return coordinate.getY_coordinate();
     }
+    public byte getWidth(){
+        return this.chessman.getType().getWidth();
+    }
+    public byte getHeight(){
+        return this.chessman.getType().getHeight();
+    }
+    public char getId(){
+        return this.chessman.getId();
+    }
     public Chessman getChessman(){
         return this.chessman;
     }
+
     //将棋子移动，产生新坐标的引用
     public ChessmanWithCoordinate movedStepChessman(Step step){
         switch (step.getDir()){
@@ -77,7 +87,11 @@ public class ChessmanWithCoordinate {
 
     }
 
-
-
-
+    @Override
+    public String toString() {
+        return "ChessmanWithCoordinate{" +
+                "chessman=" + chessman +
+                ", coordinate=" + coordinate +
+                '}';
+    }
 }

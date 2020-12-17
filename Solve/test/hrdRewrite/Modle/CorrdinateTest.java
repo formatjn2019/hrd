@@ -3,8 +3,6 @@ package hrdRewrite.Modle;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class CorrdinateTest {
     static Corrdinate cor1,cor2,cor3,cor4;
 

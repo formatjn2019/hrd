@@ -9,22 +9,30 @@ public enum Chessman {
     赵云('d',SHANGJIANG),
     马超('e',SHANGJIANG),
     黄忠('f',SHANGJIANG),
-    兵1('e',BING),
-    兵2('f',BING),
-    兵3('g',BING),
-    兵4('h',BING);
+    兵1('g',BING),
+    兵2('h',BING),
+    兵3('i',BING),
+    兵4('j',BING);
 
     enum ChessmanType{
         CAO(2, 2),
         GUAN(2, 1),
         SHANGJIANG(1, 2),
         BING(1, 1);
-        private final short width;
-        private final short height;
+        private final byte width;
+        private final byte height;
 
         ChessmanType(int width, int height) {
-            this.width = (short) width;
-            this.height = (short) height;
+            this.width = (byte) width;
+            this.height = (byte) height;
+        }
+
+        public byte getWidth() {
+            return width;
+        }
+
+        public byte getHeight() {
+            return height;
         }
     }
     public static Chessman getInstance(int index) {
