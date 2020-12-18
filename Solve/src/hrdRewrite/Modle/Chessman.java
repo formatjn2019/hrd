@@ -35,20 +35,20 @@ public enum Chessman {
             return height;
         }
     }
-    public static Chessman getInstance(int index) {
-        switch (index){
-            case 0: return 曹操;
-            case 1: return 关羽;
-            case 2: return 张飞;
-            case 3: return 赵云;
-            case 4: return 马超;
-            case 5: return 黄忠;
-            case 6: return 兵1;
-            case 7: return 兵2;
-            case 8: return 兵3;
-            case 9: return 兵4;
-        }
-        return null;
+    public static Chessman getInstanceByID(char id) {
+        return switch (id) {
+            case 'a' -> 曹操;
+            case 'b' -> 关羽;
+            case 'c' -> 张飞;
+            case 'd' -> 赵云;
+            case 'e' -> 马超;
+            case 'f' -> 黄忠;
+            case 'g' -> 兵1;
+            case 'h' -> 兵2;
+            case 'i' -> 兵3;
+            case 'j' -> 兵4;
+            default -> null;
+        };
     }
 
 

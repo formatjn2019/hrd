@@ -1,12 +1,14 @@
 package hrdRewrite.Modle;
 
+import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
-public class ChessmanWithCoordinate {
+public class ChessmanWithCoordinate implements Comparable<ChessmanWithCoordinate>{
     private final Chessman chessman;
     private final Corrdinate coordinate;
-    private static HashMap<Chessman,HashMap<Corrdinate,ChessmanWithCoordinate>> chessmanCashe = new HashMap<>();
+    private static final Map<Chessman,Map<Corrdinate,ChessmanWithCoordinate>> chessmanCashe = new EnumMap<>(Chessman.class);
 
     @Override
     public boolean equals(Object o) {
@@ -23,17 +25,17 @@ public class ChessmanWithCoordinate {
     }
 
     public static ChessmanWithCoordinate getInstance(Chessman chessman, Corrdinate corrdinate){
-        HashMap<Corrdinate, ChessmanWithCoordinate> corrdinateMap = chessmanCashe.get(chessman);
+        Map<Corrdinate, ChessmanWithCoordinate> corrdinateMap = chessmanCashe.get(chessman);
         ChessmanWithCoordinate chessmanWithCoordinate;
         if (corrdinateMap  == null){
-            corrdinateMap = new HashMap<Corrdinate,ChessmanWithCoordinate>();
+            corrdinateMap = new HashMap<>();
             chessmanCashe.put(chessman,corrdinateMap);
             chessmanWithCoordinate = new ChessmanWithCoordinate(chessman,corrdinate);
             corrdinateMap.put(corrdinate,chessmanWithCoordinate);
             return chessmanWithCoordinate;
         }
-        chessmanWithCoordinate = corrdinateMap.get(corrdinateMap);
-        if (corrdinate == null){
+        chessmanWithCoordinate = corrdinateMap.get(corrdinate);
+        if (chessmanWithCoordinate == null){
             chessmanWithCoordinate = new ChessmanWithCoordinate(chessman,corrdinate);
             corrdinateMap.put(corrdinate,chessmanWithCoordinate);
         }
@@ -93,5 +95,12 @@ public class ChessmanWithCoordinate {
                 "chessman=" + chessman +
                 ", coordinate=" + coordinate +
                 '}';
+    }
+
+
+
+    @Override
+    public int compareTo(ChessmanWithCoordinate o) {
+        return Integer.compare(this.coordinate.hashCode(),o.coordinate.hashCode());
     }
 }
