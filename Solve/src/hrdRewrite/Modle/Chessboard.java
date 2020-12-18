@@ -83,8 +83,9 @@ public class Chessboard {
         chessmans.put(兵4,bing4);
     }
 
-
-
+    public Map<Chessman, ChessmanWithCoordinate> getChessmans() {
+        return chessmans;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -141,6 +142,30 @@ public class Chessboard {
     }
 
 
+
+    //计算棋局镜像
+    public long getMirror() {
+        if (this.mirror == 0){
+           //计算镜像
+            this.mirror=calculateMirror(this.chessmans);
+        }
+        return this.mirror;
+    }
+    //计算对称棋局的镜像
+    public long getAdjectiveMirror(){
+        if (this.adjectiveMirror == 0){
+            //计算对称镜像
+            EnumMap<Chessman, ChessmanWithCoordinate> enumMap = new EnumMap<>(Chessman.class);
+            for (ChessmanWithCoordinate chessman : chessmans.values()){
+                enumMap.put(chessman.getChessman(),
+                        ChessmanWithCoordinate.getInstance(chessman.getChessman(),
+                                Corrdinate.getInstance((byte) (4-chessman.getWidth()-chessman.getXcoordinate()),chessman.getYcoordinate())));
+            }
+            this.adjectiveMirror=calculateMirror(enumMap);
+        }
+        return this.adjectiveMirror;
+    }
+
     @Override
     public String toString() {
         char[][] arr = new char[5][4];
@@ -165,7 +190,7 @@ public class Chessboard {
             sb.append('\n');
         }
         sb.append(lines);
-        
+
         return "Chessboard{" +
                 "status=" + getState() +
                 ", mirror=" + getMirror()+
@@ -173,27 +198,5 @@ public class Chessboard {
                 '\n'+
                 sb.toString()+
                 '}';
-    }
-    //计算棋局镜像
-    public long getMirror() {
-        if (this.mirror == 0){
-           //计算镜像
-            this.mirror=calculateMirror(this.chessmans);
-        }
-        return this.mirror;
-    }
-    //计算对称棋局的镜像
-    public long getAdjectiveMirror(){
-        if (this.adjectiveMirror == 0){
-            //计算对称镜像
-            EnumMap<Chessman, ChessmanWithCoordinate> enumMap = new EnumMap<>(Chessman.class);
-            for (ChessmanWithCoordinate chessman : chessmans.values()){
-                enumMap.put(chessman.getChessman(),
-                        ChessmanWithCoordinate.getInstance(chessman.getChessman(),
-                                Corrdinate.getInstance((byte) (4-chessman.getWidth()-chessman.getXcoordinate()),chessman.getYcoordinate())));
-            }
-            this.adjectiveMirror=calculateMirror(enumMap);
-        }
-        return this.adjectiveMirror;
     }
 }
