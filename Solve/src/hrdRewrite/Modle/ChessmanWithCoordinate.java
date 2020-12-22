@@ -72,21 +72,8 @@ public class ChessmanWithCoordinate implements Comparable<ChessmanWithCoordinate
     }
 
     //将棋子移动，产生新坐标的引用
-    public ChessmanWithCoordinate movedStepChessman(Step step){
-        switch (step.getDir()){
-            case UP :
-                ChessmanWithCoordinate.getInstance(chessman, Corrdinate.getInstance((byte) (getXcoordinate()-step.getLen()),getYcoordinate()));
-            case DOWN:
-                ChessmanWithCoordinate.getInstance(chessman, Corrdinate.getInstance((byte) (getXcoordinate()+step.getLen()),getYcoordinate()));
-            case LEFT:
-                ChessmanWithCoordinate.getInstance(chessman, Corrdinate.getInstance(getXcoordinate(), (byte) (getYcoordinate()-step.getLen())));
-            case RIGHT:
-                ChessmanWithCoordinate.getInstance(chessman, Corrdinate.getInstance(getXcoordinate(), (byte) (getYcoordinate()+step.getLen())));
-            default:
-                return null;
-        }
-
-
+    public ChessmanWithCoordinate movedStep(Step step){
+        return getInstance(chessman,coordinate.moveStep(step));
     }
 
     @Override

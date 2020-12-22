@@ -22,7 +22,19 @@ public enum Step {
         this.dir = dir;
         this.len = (byte) len;
     }
-
+    public Step getOppoisteStep(){
+        return switch (this) {
+            case UP1 -> DOWN1;
+            case UP2 -> DOWN2;
+            case DOWN1 -> UP1;
+            case DOWN2 -> UP2;
+            case LEFT1 -> RIGHT1;
+            case LEFT2 -> RIGHT2;
+            case RIGHT1 -> LEFT1;
+            case RIGHT2 -> LEFT2;
+            default -> null;
+        };
+    }
 
     public Direction getDir() {
         return dir;

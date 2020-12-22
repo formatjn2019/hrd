@@ -23,6 +23,15 @@ public class Corrdinate {
         this.y_coordinate =  y_coordinate;
     }
 
+    public Corrdinate moveStep(Step step){
+        return switch (step.getDir()) {
+            case UP -> getInstance(this.x_coordinate, (byte) (this.y_coordinate - step.getLen()));
+            case DOWN -> getInstance(this.x_coordinate, (byte) (this.y_coordinate + step.getLen()));
+            case LEFT -> getInstance((byte) (this.x_coordinate-step.getLen()), this.y_coordinate);
+            case RIGHT -> getInstance((byte) (this.x_coordinate+step.getLen()), this.y_coordinate);
+        };
+
+    }
 
     public byte getX_coordinate() {
         return x_coordinate;
