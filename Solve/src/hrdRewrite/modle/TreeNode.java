@@ -1,22 +1,21 @@
-package hrdRewrite.Modle;
+package hrdRewrite.modle;
 
 
 import java.util.*;
 
-import static hrdRewrite.Modle.ChessmanStep.SpaceChanged.*;
+import static hrdRewrite.modle.ChessmanStep.SpaceChanged.*;
 
 //只用来辅助计算，常用方法转发chessboar的
 public class TreeNode {
     private final TreeNode parent;
     private final Chessboard chessboard;
-    private final char chessboardArr [][];
+    private final char[][] chessboardArr;
     private final Corrdinate space1;
     private final Corrdinate space2;
 
     //测试使用
     public char[][] getChessboardArr() {
-
-        return chessboardArr;
+        return new char[][]{chessboardArr[0].clone(),chessboardArr[1].clone(),chessboardArr[2].clone(),chessboardArr[3].clone(),chessboardArr[4].clone()};
     }
     //测试使用
     public TreeNode getParent() {
@@ -57,41 +56,54 @@ public class TreeNode {
     //根据步骤进行初始化
     public TreeNode(TreeNode parent, ChessmanStep chessmanStep){
         this.parent=parent;
-        char[][] parentChessboardArrClone=parent.getChessboardArr().clone();
+        char[][] parentChessboardArrClone=parent.getChessboardArr();
         //子类棋盘对象构建
         EnumMap<Chessman, ChessmanWithCoordinate> enumMap =new EnumMap<>(parent.chessboard.getChessmans());
         ChessmanWithCoordinate beforeChangeChessman=enumMap.get(chessmanStep.getChessman());
         ChessmanWithCoordinate afterChangeChessman=beforeChangeChessman.movedStep(chessmanStep.getStep());
         //空格坐标移动
         switch (chessmanStep.getSpaceChanged()){
+
             case SP1 -> {
-                space1=parent.space1.moveStep(chessmanStep.getStep().getOppoisteStep());
+                space1=parent.space1.moveStep(chessmanStep.getStep().getOppoisteStep(),chessmanStep.getChessman());
                 space2=parent.space2;
             }
             case SP2 -> {
                 space1=parent.space1;
-                space2=parent.space2.moveStep(chessmanStep.getStep().getOppoisteStep());
+                space2=parent.space2.moveStep(chessmanStep.getStep().getOppoisteStep(),chessmanStep.getChessman());
             }
             case SP12 -> {
-                space1=parent.space1.moveStep(chessmanStep.getStep().getOppoisteStep());
-                space2=parent.space2.moveStep(chessmanStep.getStep().getOppoisteStep());
+                space1=parent.space1.moveStep(chessmanStep.getStep().getOppoisteStep(),chessmanStep.getChessman());
+                space2=parent.space2.moveStep(chessmanStep.getStep().getOppoisteStep(),chessmanStep.getChessman());
             }
             default -> {
-                space1 =parent.space1;
-                space2 =parent.space2;
+                //忽略厚度，用于移动两步
+                space1=parent.space1.moveStep(chessmanStep.getStep().getOppoisteStep());
+                space2=parent.space2.moveStep(chessmanStep.getStep().getOppoisteStep());
             }
         }
         enumMap.put(chessmanStep.getChessman(),afterChangeChessman);
         this.chessboard=new Chessboard(enumMap);
+
+        System.out.println("parent:"+parent);
+        System.out.println("step:"+chessmanStep);
+
         //节点辅助数组更改
+        int count=0;
         for (int i = afterChangeChessman.getYcoordinate();i<afterChangeChessman.getYcoordinate()+afterChangeChessman.getHeight();i++){
             for (int j = afterChangeChessman.getXcoordinate();j<afterChangeChessman.getXcoordinate()+afterChangeChessman.getWidth();j++){
                 parentChessboardArrClone[i][j]=afterChangeChessman.getId();
+                count++;
             }
         }
+        System.out.println(afterChangeChessman+""+count);
         parentChessboardArrClone[space1.getY_coordinate()][space1.getX_coordinate()]='\0';
         parentChessboardArrClone[space2.getY_coordinate()][space2.getX_coordinate()]='\0';
+
+
         this.chessboardArr=parentChessboardArrClone;
+        //测试使用
+        System.out.println("this:"+this);
     }
     //获取该节点能获得的所有步骤
     public LinkedList<ChessmanStep> getSteps(){
@@ -101,6 +113,7 @@ public class TreeNode {
         ChessmanStep.SpaceChanged[] spaceChanged = {SP1,SP2};
         char[] ids =new char[2];
         char id;
+        int spaceType;
         //上1 宽1
         for (int i =0;i<2;i++){
             ids[i]=searchChessmanId(corrdinate[i],Step.UP1);
@@ -116,10 +129,24 @@ public class TreeNode {
         //上2 宽1
         //横坐标相等，纵坐标相差1
         if(space1.getX_coordinate() == space2.getX_coordinate() && Math.abs(space1.getY_coordinate()-space2.getY_coordinate())==1) {
-            id= ids[0] >ids[1] ? ids[0]:ids[1];
-            if (id >'b'){
-                steps.add(ChessmanStep.getInstance(Chessman.getInstanceByID(ids[0]),Step.UP2, SP12));
+            if (ids[0] == '\0'){
+                id=ids[1];
+                spaceType=0;
+            }else {
+                id=ids[0];
+                spaceType=1;
             }
+            switch (id){
+                case 'h','i','j','k'->{
+                    //移动距离最远的格子
+                    steps.add(ChessmanStep.getInstance(Chessman.getInstanceByID(id),Step.UP2, spaceChanged[spaceType]));
+                }
+                case 'c','d','e','f'->{
+                    //都移动
+                    steps.add(ChessmanStep.getInstance(Chessman.getInstanceByID(id),Step.UP2, SP21));
+                }
+            }
+
         }
         //下1 宽1
         for (int i =0;i<2;i++){
@@ -136,9 +163,22 @@ public class TreeNode {
         //下2 宽1
         //横坐标相等，纵坐标相差1
         if(space1.getX_coordinate() == space2.getX_coordinate() && Math.abs(space1.getY_coordinate()-space2.getY_coordinate())==1) {
-            id= ids[0] >ids[1] ? ids[0]:ids[1];
-            if (id >'b'){
-                steps.add(ChessmanStep.getInstance(Chessman.getInstanceByID(ids[0]),Step.DOWN2, SP12));
+            if (ids[0] == '\0'){
+                id=ids[1];
+                spaceType=0;
+            }else {
+                id=ids[0];
+                spaceType=1;
+            }
+            switch (id){
+                case 'h','i','j','k'->{
+                    //移动距离最远的格子
+                    steps.add(ChessmanStep.getInstance(Chessman.getInstanceByID(id),Step.DOWN2, spaceChanged[spaceType]));
+                }
+                case 'c','d','e','f'->{
+                    //都移动
+                    steps.add(ChessmanStep.getInstance(Chessman.getInstanceByID(id),Step.DOWN2, SP21));
+                }
             }
         }
 
@@ -157,9 +197,22 @@ public class TreeNode {
         //左2 高1
         //纵坐标相等，横坐标相差1
         if(space1.getY_coordinate() == space2.getY_coordinate() && Math.abs(space1.getX_coordinate()-space2.getX_coordinate())==1) {
-            id= ids[0] >ids[1] ? ids[0]:ids[1];
-            if (id == 'b' || id >'f'){
-                steps.add(ChessmanStep.getInstance(Chessman.getInstanceByID(ids[0]),Step.LEFT2, SP12));
+            if (ids[0] == '\0'){
+                id=ids[1];
+                spaceType=0;
+            }else {
+                id=ids[0];
+                spaceType=1;
+            }
+            switch (id){
+                case 'h','i','j','k'->{
+                    //移动距离最远的格子
+                    steps.add(ChessmanStep.getInstance(Chessman.getInstanceByID(id),Step.LEFT2, spaceChanged[spaceType]));
+                }
+                case 'b'->{
+                    //都移动
+                    steps.add(ChessmanStep.getInstance(Chessman.getInstanceByID(id),Step.LEFT2, SP21));
+                }
             }
         }
 
@@ -178,9 +231,22 @@ public class TreeNode {
         //左2 高1
         //纵坐标相等，横坐标相差1
         if(space1.getY_coordinate() == space2.getY_coordinate() && Math.abs(space1.getX_coordinate()-space2.getX_coordinate())==1) {
-            id= ids[0] >ids[1] ? ids[0]:ids[1];
-            if (id == 'b' || id >'f'){
-                steps.add(ChessmanStep.getInstance(Chessman.getInstanceByID(ids[0]),Step.RIGHT2, SP12));
+            if (ids[0] == '\0'){
+                id=ids[1];
+                spaceType=0;
+            }else {
+                id=ids[0];
+                spaceType=1;
+            }
+            switch (id){
+                case 'h','i','j','k'->{
+                    //移动距离最远的格子
+                    steps.add(ChessmanStep.getInstance(Chessman.getInstanceByID(id),Step.RIGHT1, spaceChanged[spaceType]));
+                }
+                case 'b'->{
+                    //都移动
+                    steps.add(ChessmanStep.getInstance(Chessman.getInstanceByID(id),Step.RIGHT2, SP21));
+                }
             }
         }
 
@@ -211,9 +277,14 @@ public class TreeNode {
         return space2;
     }
 
+    public Chessboard getChessboard() {
+        return chessboard;
+    }
+
     //终止节点
     public boolean isEndNode(){
-        return false;
+        ChessmanWithCoordinate chessman = chessboard.getChessmans().get(Chessman.曹操);
+        return chessman.getXcoordinate() == 1 && chessman.getYcoordinate() ==3;
     }
 
     @Override
@@ -228,6 +299,18 @@ public class TreeNode {
 
     @Override
     public String toString() {
-        return chessboard.toString();
+        StringBuilder sb = new StringBuilder();
+        sb.append('\n');
+        for (char [] line : chessboardArr){
+            for (char c : line){
+                sb.append(c);
+                sb.append('\t');
+            }
+            sb.append('\n');
+        }
+        sb.append(chessboard.toString());
+        sb.append(space1);
+        sb.append(space2);
+        return sb.toString();
     }
 }

@@ -1,6 +1,6 @@
-package hrdRewrite.Modle;
+package hrdRewrite.modle;
 
-import static hrdRewrite.Modle.Chessman.ChessmanType.*;
+import static hrdRewrite.modle.Chessman.ChessmanType.*;
 
 public enum Chessman {
     曹操('a',CAO),

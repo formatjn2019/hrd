@@ -1,11 +1,9 @@
-package hrdRewrite.Modle;
+package hrdRewrite.modle;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.EnumMap;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class ChessboardTest {
     static Chessboard chessboard=null;

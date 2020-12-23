@@ -1,4 +1,4 @@
-package hrdRewrite.Modle;
+package hrdRewrite.modle;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -14,7 +14,7 @@ public class ChessmanStep {
         this.spaceChanged= spaceChanged;
     }
     public enum SpaceChanged {
-        SP1,SP2,SP12;
+        SP1,SP2,SP12,SP21
     }
 
     public Chessman getChessman() {

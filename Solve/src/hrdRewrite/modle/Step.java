@@ -1,5 +1,5 @@
-package hrdRewrite.Modle;
-import static hrdRewrite.Modle.Step.Direction.*;
+package hrdRewrite.modle;
+import static hrdRewrite.modle.Step.Direction.*;
 public enum Step {
     UP1(UP,1),
     UP2(UP,2),
@@ -11,7 +11,7 @@ public enum Step {
     RIGHT2(RIGHT,2);
 
     enum Direction{
-        UP,DOWN,LEFT,RIGHT;
+        UP,DOWN,LEFT,RIGHT
     }
 
 
@@ -36,6 +36,23 @@ public enum Step {
         };
     }
 
+    public static Step getInstance(Direction dir,int len) {
+        switch (dir) {
+            case UP -> {
+                return len==1 ? UP1 : UP2;
+            }
+            case DOWN -> {
+                return len==1 ? DOWN1 : DOWN2;
+            }
+            case LEFT -> {
+                return len==1 ? LEFT1 : LEFT2;
+            }
+            case RIGHT -> {
+                return len==1 ? RIGHT1 : RIGHT2;
+            }
+        }
+        return null;
+    }
     public Direction getDir() {
         return dir;
     }

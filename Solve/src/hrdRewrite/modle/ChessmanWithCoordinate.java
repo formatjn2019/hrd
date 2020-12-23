@@ -1,4 +1,4 @@
-package hrdRewrite.Modle;
+package hrdRewrite.modle;
 
 import java.util.EnumMap;
 import java.util.HashMap;

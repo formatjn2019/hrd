@@ -1,4 +1,4 @@
-package hrdRewrite.Modle;
+package hrdRewrite.modle;
 
 import java.util.HashMap;
 
@@ -30,7 +30,14 @@ public class Corrdinate {
             case LEFT -> getInstance((byte) (this.x_coordinate-step.getLen()), this.y_coordinate);
             case RIGHT -> getInstance((byte) (this.x_coordinate+step.getLen()), this.y_coordinate);
         };
-
+    }
+    public Corrdinate moveStep(Step step,Chessman chessman){
+        return switch (step.getDir()) {
+            case UP -> getInstance(this.x_coordinate, (byte) (this.y_coordinate - step.getLen()-(chessman.getType().getHeight()-1)));
+            case DOWN -> getInstance(this.x_coordinate, (byte) (this.y_coordinate + step.getLen()+(chessman.getType().getHeight()-1)));
+            case LEFT -> getInstance((byte) (this.x_coordinate-step.getLen()-(chessman.getType().getWidth()-1)), this.y_coordinate);
+            case RIGHT -> getInstance((byte) (this.x_coordinate+step.getLen()+(chessman.getType().getWidth()-1)), this.y_coordinate);
+        };
     }
 
     public byte getX_coordinate() {

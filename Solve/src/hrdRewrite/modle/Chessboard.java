@@ -1,11 +1,11 @@
-package hrdRewrite.Modle;
+package hrdRewrite.modle;
 
 
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
 
-import static hrdRewrite.Modle.Chessman.*;
+import static hrdRewrite.modle.Chessman.*;
 
 public class Chessboard {
     private long state=0L;

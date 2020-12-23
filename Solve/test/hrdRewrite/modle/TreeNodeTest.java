@@ -1,20 +1,19 @@
-package hrdRewrite.Modle;
+package hrdRewrite.modle;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.EnumMap;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class TreeNodeTest {
     static TreeNode boot;
     static TreeNode treeNode;
     @BeforeAll
     static void init(){
-        Chessboard chessboard3 = new Chessboard(new EnumMap<>(Chessman.class), 9486557393564L);
+        Chessboard chessboard1 = new Chessboard(new EnumMap<>(Chessman.class), 9486557393564L);
+        Chessboard chessboard2 = new Chessboard(new EnumMap<>(Chessman.class), 9555276870300L);
 //        boot = new TreeNode(chessboard3);
-        treeNode = new TreeNode(chessboard3);
+        treeNode = new TreeNode(chessboard2);
 //        treeNode = new TreeNode(boot,ChessmanStep.getInstance(Chessman.兵2,Step.UP1,ChessmanStep.SpaceChanged.SP1));
     }
     @Test
