@@ -86,7 +86,7 @@ public class Chessboard {
     public Map<Chessman, ChessmanWithCoordinate> getChessmans() {
         return chessmans;
     }
-
+    //使用映像 约360ms
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -94,7 +94,13 @@ public class Chessboard {
         Chessboard that = (Chessboard) o;
         return (this.getMirror() == that.getMirror()) || (this.getAdjectiveMirror() == that.getAdjectiveMirror());
     }
-
+    //不使用映像，仅判断非重复节点 约14min 10s 68 ms
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        Chessboard that = (Chessboard) o;
+//        return (this.getState() == that.getState());
+//    }
     //重写hashcode方法但不一定完全散列
     @Override
     public int hashCode() {

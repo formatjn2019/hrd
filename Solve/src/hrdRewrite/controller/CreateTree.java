@@ -19,8 +19,8 @@ public class CreateTree {
 
     public void printAllStep(){
         System.out.println(message.toString());
-        for (Chessboard temp : stack){
-            System.out.println(temp);
+        while (!stack.empty()){
+            System.out.println(stack.pop());
         }
     }
     public void calculateResult(){
@@ -45,11 +45,13 @@ public class CreateTree {
                 }
             }
         }
-        message.append("level: ");
-        message.append(level);
-        message.append("newNodes: ");
-        message.append(newNodes.size());
-        message.append("\n");
+//        message.append("level: ");
+//        message.append(level);
+//        message.append("newNodes: ");
+//        message.append(newNodes.size());
+//        message.append("\n");
+        System.out.println("level"+level);
+        System.out.println("newNodes"+newNodes.size());
         return createlayerTree(newNodes,level+1);
     }
 

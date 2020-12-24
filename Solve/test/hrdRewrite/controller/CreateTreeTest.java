@@ -12,8 +12,8 @@ class CreateTreeTest {
     static void init(){
 //        tree1 = new CreateTree(9486557393564L);
 //        tree1 = new CreateTree(9486557392508L);
-        tree1 = new CreateTree(10036381364852L);
-        tree2 = new CreateTree(9555276870300L);
+        tree1 = new CreateTree(9486557393564L);
+//        tree2 = new CreateTree(9555276870300L);
     }
     @Test
     void printAllStep() {

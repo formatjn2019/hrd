@@ -85,25 +85,25 @@ public class TreeNode {
         enumMap.put(chessmanStep.getChessman(),afterChangeChessman);
         this.chessboard=new Chessboard(enumMap);
 
-        System.out.println("parent:"+parent);
-        System.out.println("step:"+chessmanStep);
+//        System.out.println("parent:"+parent);
+//        System.out.println("step:"+chessmanStep);
 
         //节点辅助数组更改
-        int count=0;
+//        int count=0;
         for (int i = afterChangeChessman.getYcoordinate();i<afterChangeChessman.getYcoordinate()+afterChangeChessman.getHeight();i++){
             for (int j = afterChangeChessman.getXcoordinate();j<afterChangeChessman.getXcoordinate()+afterChangeChessman.getWidth();j++){
                 parentChessboardArrClone[i][j]=afterChangeChessman.getId();
-                count++;
+//                count++;
             }
         }
-        System.out.println(afterChangeChessman+""+count);
+//        System.out.println(afterChangeChessman+""+count);
         parentChessboardArrClone[space1.getY_coordinate()][space1.getX_coordinate()]='\0';
         parentChessboardArrClone[space2.getY_coordinate()][space2.getX_coordinate()]='\0';
 
 
         this.chessboardArr=parentChessboardArrClone;
         //测试使用
-        System.out.println("this:"+this);
+//        System.out.println("this:"+this);
     }
     //获取该节点能获得的所有步骤
     public LinkedList<ChessmanStep> getSteps(){
@@ -171,14 +171,10 @@ public class TreeNode {
                 spaceType=1;
             }
             switch (id){
-                case 'h','i','j','k'->{
-                    //移动距离最远的格子
-                    steps.add(ChessmanStep.getInstance(Chessman.getInstanceByID(id),Step.DOWN2, spaceChanged[spaceType]));
-                }
-                case 'c','d','e','f'->{
-                    //都移动
-                    steps.add(ChessmanStep.getInstance(Chessman.getInstanceByID(id),Step.DOWN2, SP21));
-                }
+                //移动距离最远的格子
+                case 'h','i','j','k'->steps.add(ChessmanStep.getInstance(Chessman.getInstanceByID(id),Step.DOWN2, spaceChanged[spaceType]));
+                //都移动
+                case 'c','d','e','f'->steps.add(ChessmanStep.getInstance(Chessman.getInstanceByID(id),Step.DOWN2, SP21));
             }
         }
 

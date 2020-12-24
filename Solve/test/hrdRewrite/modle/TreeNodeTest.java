@@ -11,7 +11,9 @@ class TreeNodeTest {
     @BeforeAll
     static void init(){
         Chessboard chessboard1 = new Chessboard(new EnumMap<>(Chessman.class), 9486557393564L);
-        Chessboard chessboard2 = new Chessboard(new EnumMap<>(Chessman.class), 9555276870300L);
+//        Chessboard chessboard2 = new Chessboard(new EnumMap<>(Chessman.class), 9555276870300L);
+//        Chessboard chessboard2 = new Chessboard(new EnumMap<>(Chessman.class), 9486557393564L);
+        Chessboard chessboard2 = new Chessboard(new EnumMap<>(Chessman.class), 9486557393564L);
 //        boot = new TreeNode(chessboard3);
         treeNode = new TreeNode(chessboard2);
 //        treeNode = new TreeNode(boot,ChessmanStep.getInstance(Chessman.兵2,Step.UP1,ChessmanStep.SpaceChanged.SP1));
