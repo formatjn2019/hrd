@@ -1,35 +1,63 @@
 package hrd.modle;
+import static hrd.modle.Step.Direction.*;
+public enum Step {
+    UP1(UP,1),
+    UP2(UP,2),
+    DOWN1(DOWN,1),
+    DOWN2(DOWN,2),
+    LEFT1(LEFT,1),
+    LEFT2(LEFT,2),
+    RIGHT1(RIGHT,1),
+    RIGHT2(RIGHT,2);
 
-public class Step {
-    public enum Direction{
-        UP,DOWN,LEFT,RINGHT
-    }
-    char Id;
-    Direction Dir;
-    int Length;
-    public Step(char id, Direction dir, int length) {
-        super();
-        Id = id;
-        Dir = dir;
-        Length = length;
+    enum Direction{
+        UP,DOWN,LEFT,RIGHT
     }
 
-    public char getId() {
-        return Id;
+
+    private final Direction dir;
+    private final byte len;
+
+    Step(Direction dir, int len) {
+        this.dir = dir;
+        this.len = (byte) len;
     }
-    public void setId(char id) {
-        Id = id;
+    public Step getOppoisteStep(){
+        return switch (this) {
+            case UP1 -> DOWN1;
+            case UP2 -> DOWN2;
+            case DOWN1 -> UP1;
+            case DOWN2 -> UP2;
+            case LEFT1 -> RIGHT1;
+            case LEFT2 -> RIGHT2;
+            case RIGHT1 -> LEFT1;
+            case RIGHT2 -> LEFT2;
+            default -> null;
+        };
+    }
+
+    public static Step getInstance(Direction dir,int len) {
+        switch (dir) {
+            case UP -> {
+                return len==1 ? UP1 : UP2;
+            }
+            case DOWN -> {
+                return len==1 ? DOWN1 : DOWN2;
+            }
+            case LEFT -> {
+                return len==1 ? LEFT1 : LEFT2;
+            }
+            case RIGHT -> {
+                return len==1 ? RIGHT1 : RIGHT2;
+            }
+        }
+        return null;
     }
     public Direction getDir() {
-        return Dir;
+        return dir;
     }
-    public void setDir(Direction dir) {
-        Dir = dir;
-    }
-    public int getLength() {
-        return Length;
-    }
-    public void setLength(int length) {
-        Length = length;
+
+    public byte getLen() {
+        return len;
     }
 }

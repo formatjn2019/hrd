@@ -1,7 +1,4 @@
-package hrdRewrite.modle;
-
-import hrdRewrite.modle.Chessman;
-import hrdRewrite.modle.Step;
+package hrd.modle;
 
 import java.util.HashMap;
 
@@ -32,19 +29,14 @@ public class Corrdinate {
             case DOWN -> getInstance(this.x_coordinate, (byte) (this.y_coordinate + step.getLen()));
             case LEFT -> getInstance((byte) (this.x_coordinate-step.getLen()), this.y_coordinate);
             case RIGHT -> getInstance((byte) (this.x_coordinate+step.getLen()), this.y_coordinate);
-            case UPLEFT -> getInstance((byte) (this.x_coordinate+step.getLen()-step.getLen()), (byte) (this.y_coordinate - step.getLen()));
-            case UPRIGHT -> getInstance((byte) (this.x_coordinate+step.getLen()+step.getLen()), (byte) (this.y_coordinate - step.getLen()));
-            case DOWNLEFT ->  getInstance((byte) (this.x_coordinate+step.getLen()-step.getLen()), (byte) (this.y_coordinate + step.getLen()));
-            case DOWNRIGHT -> getInstance((byte) (this.x_coordinate+step.getLen()+step.getLen()), (byte) (this.y_coordinate + step.getLen()));
         };
     }
-    public Corrdinate moveStep(Step step, Chessman chessman){
+    public Corrdinate moveStep(Step step,Chessman chessman){
         return switch (step.getDir()) {
             case UP -> getInstance(this.x_coordinate, (byte) (this.y_coordinate - step.getLen()-(chessman.getType().getHeight()-1)));
             case DOWN -> getInstance(this.x_coordinate, (byte) (this.y_coordinate + step.getLen()+(chessman.getType().getHeight()-1)));
             case LEFT -> getInstance((byte) (this.x_coordinate-step.getLen()-(chessman.getType().getWidth()-1)), this.y_coordinate);
             case RIGHT -> getInstance((byte) (this.x_coordinate+step.getLen()+(chessman.getType().getWidth()-1)), this.y_coordinate);
-            default -> throw new IllegalStateException("Unexpected value: " + step.getDir());
         };
     }
 
@@ -75,7 +67,7 @@ public class Corrdinate {
 
     @Override
     public String toString() {
-        return "Coordinate{" +
+        return "ChessmanCoordinate{" +
                 "x_coordinate=" + x_coordinate +
                 ", y_coordinate=" + y_coordinate +
                 '}';

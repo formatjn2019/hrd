@@ -1,9 +1,9 @@
-package hrdRewrite.controller;
+package hrd.controller;
 
-import hrdRewrite.modle.Chessboard;
-import hrdRewrite.modle.Chessman;
-import hrdRewrite.modle.ChessmanStep;
-import hrdRewrite.modle.TreeNode;
+import hrd.modle.Chessboard;
+import hrd.modle.Chessman;
+import hrd.modle.ChessmanStep;
+import hrd.modle.TreeNode;
 
 import java.util.*;
 

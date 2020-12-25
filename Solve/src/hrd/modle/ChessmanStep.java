@@ -1,17 +1,14 @@
-package hrdRewrite.modle;
-
-import hrd.modle.Chessman;
-import hrd.modle.Step;
+package hrd.modle;
 
 import java.util.EnumMap;
 import java.util.Map;
 
 public class ChessmanStep {
-    private static final Map<Chessman,Map<hrd.modle.Step,Map<SpaceChanged,ChessmanStep>>> stepCache= new EnumMap<>(Chessman.class);
+    private static final Map<Chessman,Map<Step,Map<SpaceChanged,ChessmanStep>>> stepCache= new EnumMap<>(Chessman.class);
     private final Chessman chessman;
-    private final hrd.modle.Step step;
+    private final Step step;
     private final SpaceChanged spaceChanged;
-    private ChessmanStep(Chessman chessman, hrd.modle.Step step, SpaceChanged spaceChanged){
+    private ChessmanStep(Chessman chessman,Step step,SpaceChanged spaceChanged){
         this.chessman=chessman;
         this.step=step;
         this.spaceChanged= spaceChanged;
@@ -24,7 +21,7 @@ public class ChessmanStep {
         return chessman;
     }
 
-    public hrd.modle.Step getStep() {
+    public Step getStep() {
         return step;
     }
 
@@ -32,8 +29,8 @@ public class ChessmanStep {
         return spaceChanged;
     }
 
-    public static ChessmanStep getInstance(Chessman chessman, hrd.modle.Step step, SpaceChanged spaceChanged){
-        Map<hrd.modle.Step, Map<SpaceChanged, ChessmanStep>> stepMap = stepCache.get(chessman);
+    public static ChessmanStep getInstance(Chessman chessman, Step step, SpaceChanged spaceChanged){
+        Map<Step, Map<SpaceChanged, ChessmanStep>> stepMap = stepCache.get(chessman);
         if (stepMap == null){
             stepMap = new EnumMap<>(Step.class);
             stepCache.put(chessman,stepMap);

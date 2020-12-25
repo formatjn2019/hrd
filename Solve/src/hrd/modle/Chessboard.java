@@ -1,31 +1,21 @@
-package hrdRewrite.modle;
+package hrd.modle;
 
 
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
 
-import static hrdRewrite.modle.Chessman.*;
+import static hrd.modle.Chessman.*;
 
 public class Chessboard {
     private long state=0L;
     private long mirror=0L;
     private long adjectiveMirror=0L;
     private final Map<Chessman,ChessmanWithCoordinate> chessmans ;
-    private ChessmanWithCoordinate caocao;
-    private ChessmanWithCoordinate guanyu;
-    private ChessmanWithCoordinate zhangfei;
-    private ChessmanWithCoordinate zhaoyun;
-    private ChessmanWithCoordinate machao;
-    private ChessmanWithCoordinate huangzhong;
-    private ChessmanWithCoordinate bing1;
-    private ChessmanWithCoordinate bing2;
-    private ChessmanWithCoordinate bing3;
-    private ChessmanWithCoordinate bing4;
+
     //采用棋子数组初始化
     public Chessboard(Map<Chessman,ChessmanWithCoordinate> chessmanMap) {
         chessmans=chessmanMap;
-        changeMaptoChessman();
     }
     //采用长整型初始化
     public Chessboard(Map<Chessman,ChessmanWithCoordinate> chessmanMap,long state){
@@ -55,32 +45,6 @@ public class Chessboard {
             ChessmanWithCoordinate chessman = ChessmanWithCoordinate.getInstance(cm, Corrdinate.getInstance(x, y));
             this.chessmans.put(cm,chessman);
         }
-        changeMaptoChessman();
-    }
-    private void changeMaptoChessman(){
-        this.caocao = chessmans.get(曹操);
-        this.guanyu = chessmans.get(关羽);
-        this.zhangfei = chessmans.get(张飞);
-        this.zhaoyun = chessmans.get(赵云);
-        this.machao = chessmans.get(马超);
-        this.huangzhong = chessmans.get(黄忠);
-        this.bing1 = chessmans.get(兵1);
-        this.bing2 = chessmans.get(兵2);
-        this.bing3 = chessmans.get(兵3);
-        this.bing4 = chessmans.get(兵4);
-    }
-
-    private void changeChessmantoMap(){
-        chessmans.put(曹操,caocao);
-        chessmans.put(关羽,guanyu);
-        chessmans.put(张飞,zhangfei);
-        chessmans.put(赵云,zhaoyun);
-        chessmans.put(马超,machao);
-        chessmans.put(黄忠,huangzhong);
-        chessmans.put(兵1,bing1);
-        chessmans.put(兵2,bing2);
-        chessmans.put(兵3,bing3);
-        chessmans.put(兵4,bing4);
     }
 
     public Map<Chessman, ChessmanWithCoordinate> getChessmans() {

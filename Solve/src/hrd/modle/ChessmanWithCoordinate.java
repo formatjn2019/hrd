@@ -1,5 +1,4 @@
-package hrdRewrite.modle;
-
+package hrd.modle;
 
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -79,7 +78,7 @@ public class ChessmanWithCoordinate implements Comparable<ChessmanWithCoordinate
 
     @Override
     public String toString() {
-        return "Coordinate{" +
+        return "ChessmanWithCoordinate{" +
                 "chessman=" + chessman +
                 ", coordinate=" + coordinate +
                 '}';
