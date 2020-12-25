@@ -15,12 +15,12 @@ class ChessboardTest {
         ChessmanWithCoordinate caocao=ChessmanWithCoordinate.getInstance(Chessman.曹操,Corrdinate.getInstance((byte) 1,(byte) 0));
         ChessmanWithCoordinate guanyu=ChessmanWithCoordinate.getInstance(Chessman.关羽,Corrdinate.getInstance((byte) 1,(byte) 2));
         ChessmanWithCoordinate zhangfei=ChessmanWithCoordinate.getInstance(Chessman.张飞,Corrdinate.getInstance((byte) 0,(byte) 0));
-        ChessmanWithCoordinate zhaoyun=ChessmanWithCoordinate.getInstance(Chessman.赵云,Corrdinate.getInstance((byte) 3,(byte) 0));
-        ChessmanWithCoordinate macao=ChessmanWithCoordinate.getInstance(Chessman.马超,Corrdinate.getInstance((byte) 0,(byte) 2));
+        ChessmanWithCoordinate zhaoyun=ChessmanWithCoordinate.getInstance(Chessman.赵云,Corrdinate.getInstance((byte) 0,(byte) 2));
+        ChessmanWithCoordinate macao=ChessmanWithCoordinate.getInstance(Chessman.马超,Corrdinate.getInstance((byte) 3,(byte) 0));
         ChessmanWithCoordinate huangzhong=ChessmanWithCoordinate.getInstance(Chessman.黄忠,Corrdinate.getInstance((byte) 3,(byte) 2));
         ChessmanWithCoordinate bing1=ChessmanWithCoordinate.getInstance(Chessman.兵1,Corrdinate.getInstance((byte) 0,(byte) 4));
-        ChessmanWithCoordinate bing2=ChessmanWithCoordinate.getInstance(Chessman.兵2,Corrdinate.getInstance((byte) 1,(byte) 4));
-        ChessmanWithCoordinate bing3=ChessmanWithCoordinate.getInstance(Chessman.兵3,Corrdinate.getInstance((byte) 2,(byte) 4));
+        ChessmanWithCoordinate bing2=ChessmanWithCoordinate.getInstance(Chessman.兵2,Corrdinate.getInstance((byte) 1,(byte) 3));
+        ChessmanWithCoordinate bing3=ChessmanWithCoordinate.getInstance(Chessman.兵3,Corrdinate.getInstance((byte) 2,(byte) 3));
         ChessmanWithCoordinate bing4=ChessmanWithCoordinate.getInstance(Chessman.兵4,Corrdinate.getInstance((byte) 3,(byte) 4));
         chessmans.put(Chessman.曹操,caocao);
         chessmans.put(Chessman.关羽,guanyu);
@@ -50,14 +50,14 @@ class ChessboardTest {
     @Test
     void getStatus() {
         long start = System.currentTimeMillis();
-        System.out.println(chessboard.getState());
+        System.out.println(chessboard.getState()+"L");
         System.out.println(System.currentTimeMillis()-start);
     }
 
     @Test
     void getMirror() {
         System.out.println(chessboard.getMirror());
-        System.out.println(chessboard.getAdjectiveMirror());
+//        System.out.println(chessboard.getAdjectiveMirror());
     }
 
 

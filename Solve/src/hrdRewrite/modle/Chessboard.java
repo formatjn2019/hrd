@@ -92,7 +92,8 @@ public class Chessboard {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Chessboard that = (Chessboard) o;
-        return (this.getMirror() == that.getMirror()) || (this.getAdjectiveMirror() == that.getAdjectiveMirror());
+        return (this.getMirror() == that.getMirror()) || (this.getAdjectiveMirror() == that.getMirror());
+//        return (this.getMirror() == that.getMirror()) ;
     }
     //不使用映像，仅判断非重复节点 约14min 10s 68 ms
 //    @Override
