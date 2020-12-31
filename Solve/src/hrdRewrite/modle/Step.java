@@ -17,7 +17,7 @@ public enum Step {
     DOWNRIGHT1(DOWNRIGHT,1);
 
     enum Direction{
-        UP,DOWN,LEFT,RIGHT,UPLEFT, UPRIGHT, DOWNLEFT, DOWNRIGHT;
+        UP,DOWN,LEFT,RIGHT,UPLEFT, UPRIGHT, DOWNLEFT, DOWNRIGHT
 
     }
 
@@ -38,11 +38,12 @@ public enum Step {
             case LEFT1 -> RIGHT1;
             case LEFT2 -> RIGHT2;
             case RIGHT1 -> LEFT1;
+            case RIGHT2 -> LEFT2;
             case UPLEFT1 -> DOWNRIGHT1;
             case UPRIGHT1 -> DOWNLEFT1;
             case DOWNLEFT1 -> UPRIGHT1;
             case DOWNRIGHT1 -> UPLEFT1;
-            default -> null;
+            default -> throw new IllegalStateException("Error Driection");
         };
     }
 

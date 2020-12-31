@@ -20,7 +20,7 @@ public enum Chessman {
     兵4('j',BING);
 
 
-    enum ChessmanType{
+    public enum ChessmanType{
         CAO(2, 2),
         HENG(2, 1),
         SHU(1, 2),
