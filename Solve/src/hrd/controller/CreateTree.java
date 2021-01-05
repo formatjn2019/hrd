@@ -1,5 +1,6 @@
 package hrd.controller;
 
+
 import hrd.modle.Chessboard;
 import hrd.modle.Chessman;
 import hrd.modle.ChessmanStep;
@@ -13,7 +14,7 @@ public class CreateTree {
     StringBuffer message=new StringBuffer();
     private Stack<Chessboard> stack = new Stack<>();
     private int totalStep=0;
-    CreateTree(long state){
+    public CreateTree(long state){
         chessboardSet =new HashSet<>();
         root = new Chessboard(new EnumMap<>(Chessman.class), state);
     }
@@ -26,6 +27,15 @@ public class CreateTree {
             System.out.println(stack.pop());
         }
     }
+
+    public Stack<Chessboard> getStack() {
+        return stack;
+    }
+
+    public int getTotalStep() {
+        return totalStep;
+    }
+
     public void calculateResult(){
         TreeNode root = new TreeNode(this.root);
         ArrayList<TreeNode> nodes = new ArrayList<>();

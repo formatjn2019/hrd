@@ -1,5 +1,6 @@
 package hrd.modle;
 
+
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +22,14 @@ public class ChessmanWithCoordinate implements Comparable<ChessmanWithCoordinate
 
     @Override
     public int hashCode() {
-        return (chessman.getId() << 16 | (coordinate.hashCode() & 0xFFFF));
+        int i = switch (chessman.getType()) {
+
+            case CAO -> 0;
+            case HENG -> 2;
+            case SHU -> 1;
+            case BING -> 3;
+        };
+        return ( i << 24 | (coordinate.hashCode() & 0xFFFF) <<8 | (chessman.getId() & 0xFF ));
     }
 
     public static ChessmanWithCoordinate getInstance(Chessman chessman, Corrdinate corrdinate){
@@ -78,7 +86,7 @@ public class ChessmanWithCoordinate implements Comparable<ChessmanWithCoordinate
 
     @Override
     public String toString() {
-        return "ChessmanWithCoordinate{" +
+        return "Coordinate{" +
                 "chessman=" + chessman +
                 ", coordinate=" + coordinate +
                 '}';
@@ -88,6 +96,6 @@ public class ChessmanWithCoordinate implements Comparable<ChessmanWithCoordinate
 
     @Override
     public int compareTo(ChessmanWithCoordinate o) {
-        return Integer.compare(this.coordinate.hashCode(),o.coordinate.hashCode());
+        return Integer.compare(this.hashCode(),o.hashCode());
     }
 }

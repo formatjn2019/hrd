@@ -4,20 +4,26 @@ import static hrd.modle.Chessman.ChessmanType.*;
 
 public enum Chessman {
     曹操('a',CAO),
-    关羽('b',GUAN),
-    张飞('c',SHANGJIANG),
-    赵云('d',SHANGJIANG),
-    马超('e',SHANGJIANG),
-    黄忠('f',SHANGJIANG),
+    关羽1('b',HENG),
+    关羽2('b',SHU),
+    张飞1('c',HENG),
+    张飞2('c',SHU),
+    赵云1('d',HENG),
+    赵云2('d',SHU),
+    马超1('e',HENG),
+    马超2('e',SHU),
+    黄忠1('f',HENG),
+    黄忠2('f',SHU),
     兵1('g',BING),
     兵2('h',BING),
     兵3('i',BING),
     兵4('j',BING);
 
-    enum ChessmanType{
+
+    public enum ChessmanType{
         CAO(2, 2),
-        GUAN(2, 1),
-        SHANGJIANG(1, 2),
+        HENG(2, 1),
+        SHU(1, 2),
         BING(1, 1);
         private final byte width;
         private final byte height;
@@ -35,14 +41,14 @@ public enum Chessman {
             return height;
         }
     }
-    public static Chessman getInstanceByID(char id) {
+    public static Chessman getInstanceByID(char id,ChessmanType chessmanType) {
         return switch (id) {
             case 'a' -> 曹操;
-            case 'b' -> 关羽;
-            case 'c' -> 张飞;
-            case 'd' -> 赵云;
-            case 'e' -> 马超;
-            case 'f' -> 黄忠;
+            case 'b' -> chessmanType == HENG ? 关羽1:关羽2;
+            case 'c' ->  chessmanType == HENG ? 张飞1:张飞2;
+            case 'd' ->  chessmanType == HENG ? 赵云1:赵云2;
+            case 'e' ->  chessmanType == HENG ? 马超1:马超2;
+            case 'f' ->  chessmanType == HENG ? 黄忠1:黄忠2;
             case 'g' -> 兵1;
             case 'h' -> 兵2;
             case 'i' -> 兵3;

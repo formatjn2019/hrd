@@ -1,10 +1,6 @@
 package hrd.modle;
 
-
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.Map;
-
+import java.util.*;
 import static hrd.modle.Chessman.*;
 
 public class Chessboard {
@@ -17,31 +13,27 @@ public class Chessboard {
     public Chessboard(Map<Chessman,ChessmanWithCoordinate> chessmanMap) {
         chessmans=chessmanMap;
     }
+
     //采用长整型初始化
+    //方便移动和存储
     public Chessboard(Map<Chessman,ChessmanWithCoordinate> chessmanMap,long state){
         this.state=state;
-        long temp=state;
         chessmans = chessmanMap;
+        long temp=state;
         byte x,y;
-        long t2=0x3L,t3=0x7L;
+        long t1=0x1L,t2=0x3L,t3=0x7L;
+        boolean []types=new boolean[10];
+        for (int i =5;i>0;i--) {
+            types[i] = (temp &t1 )==1;
+            temp >>= 1;
+        }
         Chessman cm;
         for (char i='j';i>='a';i--){
-            //曹操和四上将纵坐标压缩为2位
-            switch (i) {
-                case 'a', 'c', 'd', 'e', 'f' -> {
-                    y = (byte) (temp & t2);
-                    temp >>= 2;
-                    x = (byte) (temp & t2);
-                    temp >>= 2;
-                }
-                default -> {
-                    y = (byte) (temp & t3);
-                    temp >>= 3;
-                    x = (byte) (temp & t2);
-                    temp >>= 2;
-                }
-            }
-            cm=Chessman.getInstanceByID(i);
+            y = (byte) (temp & t3);
+            temp >>= 3;
+            x = (byte) (temp & t2);
+            temp >>= 2;
+            cm=Chessman.getInstanceByID(i,types[i-'a']?ChessmanType.HENG:ChessmanType.SHU);
             ChessmanWithCoordinate chessman = ChessmanWithCoordinate.getInstance(cm, Corrdinate.getInstance(x, y));
             this.chessmans.put(cm,chessman);
         }
@@ -57,57 +49,65 @@ public class Chessboard {
         if (o == null || getClass() != o.getClass()) return false;
         Chessboard that = (Chessboard) o;
         return (this.getMirror() == that.getMirror()) || (this.getAdjectiveMirror() == that.getMirror());
-//        return (this.getMirror() == that.getMirror()) ;
     }
-    //不使用映像，仅判断非重复节点 约14min 10s 68 ms
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        Chessboard that = (Chessboard) o;
-//        return (this.getState() == that.getState());
-//    }
+//    //不使用映像，仅判断非重复节点 约14min 10s 68 ms
+////    @Override
+////    public boolean equals(Object o) {
+////        if (this == o) return true;
+////        Chessboard that = (Chessboard) o;
+////        return (this.getState() == that.getState());
+////    }
     //重写hashcode方法但不一定完全散列
     @Override
     public int hashCode() {
         return (int) (this.getMirror()>>32 ^ this.getMirror());
     }
 
+    private ChessmanWithCoordinate getGuanYu(){
+        return chessmans.get(关羽1) == null ? chessmans.get(关羽2):chessmans.get(关羽1);
+    }
+    private ChessmanWithCoordinate getZhangFei(){
+        return chessmans.get(张飞1) ==null ? chessmans.get(张飞2):chessmans.get(张飞1);
+    }
+    private ChessmanWithCoordinate getZhaoYun(){
+        return chessmans.get(赵云1) ==null ? chessmans.get(赵云2):chessmans.get(赵云1);
+    }
+    private ChessmanWithCoordinate getMaChao(){
+        return chessmans.get(马超1) ==null ? chessmans.get(马超2):chessmans.get(马超1);
+    }
+    private ChessmanWithCoordinate getHuangZhong(){
+        return chessmans.get(黄忠1) ==null ? chessmans.get(黄忠2):chessmans.get(黄忠1);
+    }
+
+
+    //获取棋局状态
     public long getState() {
         if (this.state == 0){
-            //计算状态存储值
-            long temp=0;
+            long temp = 0;
             byte x,y;
-            for (char i='a';i<'k';i++){
-                //曹操和四上将纵坐标压缩为2位
-                x=this.chessmans.get(getInstanceByID(i)).getXcoordinate();
-                y=this.chessmans.get(getInstanceByID(i)).getYcoordinate();
-                temp = switch (i) {
-                    case 'a', 'c', 'd', 'e', 'f' -> temp << 4 | x << 2 | y;
-                    default -> temp << 5 | x << 3 | y;
-                };
+            for(ChessmanWithCoordinate chessman:chessmans.values()){
+                x=chessman.getXcoordinate();
+                y=chessman.getYcoordinate();
+                temp =temp << 5 | x<<3 | y;
             }
+            temp= temp <<1 | (getGuanYu().getChessman().getType() == ChessmanType.HENG ? 1 : 0);
+            temp= temp <<1 | (getZhangFei().getChessman().getType() == ChessmanType.HENG ? 1 : 0);
+            temp= temp <<1 | (getZhaoYun().getChessman().getType() == ChessmanType.HENG ? 1 : 0);
+            temp= temp <<1 | (getMaChao().getChessman().getType() == ChessmanType.HENG ? 1 : 0);
+            temp= temp <<1 | (getHuangZhong().getChessman().getType() == ChessmanType.HENG ? 1 : 0);
             this.state=temp;
         }
         return state;
     }
 
-    public ChessmanWithCoordinate [] sortChessman(ChessmanWithCoordinate ... chessmans){
-        Arrays.sort(chessmans);
-        return chessmans;
-    }
-
-
+    //计算映像
     public long calculateMirror(Map<Chessman,ChessmanWithCoordinate> chessmanMap){
-        long temp;
-        temp = chessmanMap.get(曹操).getXcoordinate() << 2 | chessmanMap.get(曹操).getYcoordinate();
-        temp = temp <<5 | chessmanMap.get(关羽).getXcoordinate() << 3 | chessmanMap.get(关羽).getYcoordinate();
-        ChessmanWithCoordinate[] tempChessmans = sortChessman(chessmanMap.get(张飞), chessmanMap.get(赵云), chessmanMap.get(马超), chessmanMap.get(黄忠));
-        for (ChessmanWithCoordinate chessman : tempChessmans){
-            temp = temp <<4 | chessman.getXcoordinate() << 2 | chessman.getYcoordinate();
-        }
-        tempChessmans= sortChessman(chessmanMap.get(兵1),chessmanMap.get(兵2),chessmanMap.get(兵3),chessmanMap.get(兵4));
-        for (ChessmanWithCoordinate chessman : tempChessmans){
-            temp = temp <<5 | chessman.getXcoordinate() << 3 | chessman.getYcoordinate();
+        long temp=0;
+        Collection<ChessmanWithCoordinate> values = chessmanMap.values();
+        ArrayList<ChessmanWithCoordinate> list = new ArrayList<>(values);
+        Collections.sort(list);
+        for(ChessmanWithCoordinate chessman: list){
+            temp = temp << 5 | chessman.getXcoordinate() <<3 | chessman.getYcoordinate();
         }
         return temp;
     }
@@ -117,7 +117,7 @@ public class Chessboard {
     //计算棋局镜像
     public long getMirror() {
         if (this.mirror == 0){
-           //计算镜像
+            //计算镜像
             this.mirror=calculateMirror(this.chessmans);
         }
         return this.mirror;
@@ -164,8 +164,8 @@ public class Chessboard {
 
         return "Chessboard{" +
                 "status=" + getState() +
-                ", mirror=" + getMirror()+
-                ", adjectiveMirror=" + getAdjectiveMirror()+
+//                ", mirror=" + getMirror()+
+//                ", adjectiveMirror=" + getAdjectiveMirror()+
                 '\n'+
                 sb.toString()+
                 '}';

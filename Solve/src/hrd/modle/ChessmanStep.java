@@ -1,5 +1,6 @@
 package hrd.modle;
 
+
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -8,7 +9,7 @@ public class ChessmanStep {
     private final Chessman chessman;
     private final Step step;
     private final SpaceChanged spaceChanged;
-    private ChessmanStep(Chessman chessman,Step step,SpaceChanged spaceChanged){
+    private ChessmanStep(Chessman chessman, Step step, SpaceChanged spaceChanged){
         this.chessman=chessman;
         this.step=step;
         this.spaceChanged= spaceChanged;
