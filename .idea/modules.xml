@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Solve/Solve.iml" filepath="$PROJECT_DIR$/Solve/Solve.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Solving algorithm/Solving algorithm.iml" filepath="$PROJECT_DIR$/Solving algorithm/Solving algorithm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/hrd_temp.iml" filepath="$PROJECT_DIR$/.idea/hrd_temp.iml" />
+    </modules>
+  </component>
+</project>
