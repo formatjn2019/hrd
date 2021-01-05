@@ -13,12 +13,9 @@ public class IOConstantUtils {
     public static final String FILE_PATH=".";
     public static final String CHARSET="GBK";
     private static final Map<Long, ChessboardItem> chessboardItemMap=new HashMap<>();
-    private IOConstantUtils(){};
+    private IOConstantUtils(){}
 
     public static Map<Long, ChessboardItem> getChessboardItemMap() {
-        if (chessboardItemMap.size() ==0){
-            ReadChessboards.getInstance().readChessboard();
-        }
         return chessboardItemMap;
     }
 }

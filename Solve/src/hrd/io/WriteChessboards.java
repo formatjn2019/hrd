@@ -30,11 +30,11 @@ public class WriteChessboards {
 
     public void writeChessbards(){
         Map<Long, ChessboardItem> chessboardItemMap = IOConstantUtils.getChessboardItemMap();
-        try(BufferedWriter bw=Files.newBufferedWriter(path, Charset.forName(CHARSET));) {
+        try(BufferedWriter bw=Files.newBufferedWriter(path, Charset.forName(CHARSET))) {
             bw.write(ChessboardItem.getHeads());
             bw.newLine();
             for(ChessboardItem chessboardItem : chessboardItemMap.values()){
-                bw.write(chessboardItem.toString());
+                bw.write(chessboardItem.getLine());
                 bw.newLine();
             }
             bw.flush();

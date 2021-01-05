@@ -15,7 +15,7 @@ public class ChessboardItem implements Comparable<ChessboardItem>{
         this.type = type;
     }
     public ChessboardItem(String name, String state, String depth, String type) {
-        this.chessboard = new Chessboard(new EnumMap<Chessman, ChessmanWithCoordinate>(Chessman.class),Long.parseLong(state));
+        this.chessboard = new Chessboard(new EnumMap<>(Chessman.class),Long.parseLong(state));
         this.depth = Integer.parseInt(depth);
         this.name = name;
         this.type = Integer.parseInt(type);
@@ -41,9 +41,18 @@ public class ChessboardItem implements Comparable<ChessboardItem>{
         return "名称"+","+"状态"+","+"最优步数"+","+"类型";
     }
 
+    public String getLine() {
+        return name+","+chessboard.getState()+"L,"+depth+","+type;
+    }
+
     @Override
     public String toString() {
-        return name+","+chessboard.getState()+"L,"+depth+","+type;
+        return "ChessboardItem{" +
+                "chessboard=" + chessboard +
+                ", depth=" + depth +
+                ", name='" + name + '\'' +
+                ", type=" + type +
+                '}';
     }
 
     @Override
