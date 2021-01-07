@@ -42,7 +42,7 @@ public class ChessboardItem implements Comparable<ChessboardItem>{
     }
 
     public String getLine() {
-        return name+","+chessboard.getState()+"L,"+depth+","+type;
+        return name+","+chessboard.getState()+","+depth+","+type;
     }
 
     @Override

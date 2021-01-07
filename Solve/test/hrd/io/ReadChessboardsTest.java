@@ -18,4 +18,9 @@ class ReadChessboardsTest {
             System.out.println(chessboardItem);
         }
     }
+    @Test
+    void readMiiros() {
+        System.out.println(readChessboards.readMirrors());
+    }
+
 }

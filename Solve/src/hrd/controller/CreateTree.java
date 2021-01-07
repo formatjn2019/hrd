@@ -12,14 +12,18 @@ public class CreateTree {
     private final Set<Chessboard> chessboardSet;
     private final Chessboard root;
     StringBuffer message=new StringBuffer();
-    private Stack<Chessboard> stack = new Stack<>();
+    private final Stack<Chessboard> stack = new Stack<>();
     private int totalStep=0;
     public CreateTree(long state){
         chessboardSet =new HashSet<>();
         root = new Chessboard(new EnumMap<>(Chessman.class), state);
     }
 
+    /**
+     * 打印计算结果
+     */
     public void printAllStep(){
+        message.insert(0,stack.size()>0?"计算成功":"计算失败");
         message.insert(0,"totalNode:"+chessboardSet.size()+"\n");
         message.insert(0,"totalStep:"+totalStep+"\n");
         System.out.println(message.toString());
@@ -36,15 +40,26 @@ public class CreateTree {
         return totalStep;
     }
 
-    public void calculateResult(){
+    public boolean calculateResult(){
         TreeNode root = new TreeNode(this.root);
         ArrayList<TreeNode> nodes = new ArrayList<>();
         nodes.add(root);
+        //当前节点，直接返回
+        if (root.isEndNode()){
+            stack.add(root.getChessboard());
+            return true;
+        }
         TreeNode endNode = createlayerTree(nodes,1);
+        if (endNode == null){
+            return false;
+        }
+        //计算成功后，若拥有结果，将过程棋局入栈
         for (TreeNode tempNode = endNode;tempNode != null;tempNode=tempNode.getParent()){
             stack.add(tempNode.getChessboard());
         }
+        return true;
     }
+    //根据节点递归进行计算
     private TreeNode createlayerTree(ArrayList<TreeNode> nodes,int level){
         ArrayList<TreeNode> newNodes = new ArrayList<>();
         for (TreeNode node : nodes){
@@ -58,6 +73,10 @@ public class CreateTree {
                 }
             }
         }
+        if (newNodes.size() == 0){
+            return null;
+        }
+
         message.append("level: ");
         message.append(level);
         message.append('\t');
@@ -65,8 +84,6 @@ public class CreateTree {
         message.append(newNodes.size());
         message.append("\n");
         totalStep+=newNodes.size();
-//        System.out.println("level"+level);
-//        System.out.println("newNodes"+newNodes.size());
         return createlayerTree(newNodes,level+1);
     }
 
