@@ -41,7 +41,7 @@ public class WriteChessboards {
      * @param fileName  文件名
      * @param dataMap 数据
      */
-    public void writeChessbards(String fileName,Map<Long,ChessboardItem> dataMap){
+    public static void writeChessbards(String fileName,Map<Long,ChessboardItem> dataMap){
         try(BufferedWriter bw=Files.newBufferedWriter(LOCAL_PATH.resolve(fileName), Charset.forName(CHARSET))) {
             bw.write(ChessboardItem.getHeads());
             bw.newLine();

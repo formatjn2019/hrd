@@ -10,7 +10,7 @@ class TreeNodeTest {
     static TreeNode treeNode;
     @BeforeAll
     static void init(){
-        Chessboard chessboard = new Chessboard(new EnumMap<>(Chessman.class), 9640613352188560L);
+        Chessboard chessboard = new Chessboard(new EnumMap<>(Chessman.class), 3959430064416671L);
 //        Chessboard chessboard = new Chessboard(new EnumMap<>(Chessman.class), 9359138341900176L);
 //        boot = new TreeNode(chessboard3);
         treeNode = new TreeNode(chessboard);

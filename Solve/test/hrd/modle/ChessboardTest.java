@@ -34,7 +34,7 @@ class ChessboardTest {
         chessmans.put(Chessman.兵4,bing4);
         chessboard=new Chessboard(chessmans);
 //        chessboard = new Chessboard(new EnumMap<>(Chessman.class),20867641233797200L);
-        chessboard2 = new Chessboard(new EnumMap<>(Chessman.class),20867641233797200L);
+        chessboard2 = new Chessboard(new EnumMap<>(Chessman.class),18387170901632800L);
 //        chessboard2 = new Chessboard(new EnumMap<>(Chessman.class),20275547788314944L);
 //        chessboard3 = new Chessboard(new EnumMap<>(Chessman.class), 9486557393564L);
     }

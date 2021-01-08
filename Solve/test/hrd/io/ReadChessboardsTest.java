@@ -8,11 +8,10 @@ import java.util.Collection;
 
 class ReadChessboardsTest {
 
-    static ReadChessboards readChessboards = ReadChessboards.getInstance();
 
     @Test
     void readChessboard() {
-        readChessboards.readChessboard();
+        ReadChessboards.readChessboard();
         System.out.println(IOConstantUtils.getChessboardItemMap().size());
         for (ChessboardItem chessboardItem :IOConstantUtils.getChessboardItemMap().values()){
             System.out.println(chessboardItem);
@@ -20,7 +19,7 @@ class ReadChessboardsTest {
     }
     @Test
     void readMiiros() {
-        System.out.println(readChessboards.readMirrors());
+        System.out.println(ReadChessboards.readMirrors());
     }
 
 }

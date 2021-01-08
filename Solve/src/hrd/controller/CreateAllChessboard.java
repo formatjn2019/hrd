@@ -8,7 +8,15 @@ import hrd.modle.Corrdinate;
 import java.util.*;
 
 public class CreateAllChessboard {
-    //使用缓存高速生成棋局
+
+    /**
+     *
+     * 利用缓存高速生成所有棋局
+     *
+     * @param type          类型
+     * @param cachedMirrors 缓存的Mirrors
+     * @return              所有棋局Set
+     */
     public static Set<Chessboard> getAlltypeWithChche(int type, Set<Long> cachedMirrors){
         Chessman[] chessmans = new Chessman[10];
         boolean []types=new boolean[10];
@@ -21,22 +29,23 @@ public class CreateAllChessboard {
         for(int i =0;i<10;i++) {
             chessmans[i] = Chessman.getInstanceByID((char) ('a' + i), types[i] ? Chessman.ChessmanType.HENG : Chessman.ChessmanType.SHU);
         }
-        Set<Chessboard> calculateSet=new HashSet<>();
-        calculateChessmans(calculateSet,new ChessmanWithCoordinate[10],new char[5][4],chessmans,0);
-        System.out.println(calculateSet.size());
-        Set<Chessboard> resultSet= new HashSet<>();
-        for (Chessboard chessboard :calculateSet){
-            //镜像不存在
-            if (cachedMirrors.add(chessboard.getMirror())){
-                cachedMirrors.add(chessboard.getAdjectiveMirror());
-                resultSet.add(chessboard);
-            }
-        }
+        Set<Chessboard> resultSet=new HashSet<>();
+        calculateChessmans(resultSet,new ChessmanWithCoordinate[10],new char[5][4],chessmans,0);
         return resultSet;
     }
 
+    /**
+     * 递归计算枚举所有棋局
+     * 若采用循环嵌套，则为20层循环
+     *
+     * @param resultSet                 结果棋局
+     * @param chessmanWithCoordinates   棋子数组
+     * @param chars                     棋盘已有位置
+     * @param chessmans                 棋子类型数组
+     * @param index                     将要生成的棋子位置
+     */
     private static void calculateChessmans(Set<Chessboard> resultSet, ChessmanWithCoordinate [] chessmanWithCoordinates,char[][]chars, Chessman[] chessmans,int index){
-        if (index ==10){
+        if (index == 10){
             EnumMap<Chessman, ChessmanWithCoordinate> chessmanMap = new EnumMap<>(Chessman.class);
             for (int i =0;i<10;i++){
                 chessmanMap.put(chessmans[i],chessmanWithCoordinates[i]);

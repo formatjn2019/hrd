@@ -30,6 +30,13 @@ public class ChessmanStep {
         return spaceChanged;
     }
 
+    /**
+     * 获取实例对象
+     * @param chessman  棋子类型
+     * @param step      步骤
+     * @param spaceChanged  空格改变
+     * @return  已经缓存的棋子
+     */
     public static ChessmanStep getInstance(Chessman chessman, Step step, SpaceChanged spaceChanged){
         Map<Step, Map<SpaceChanged, ChessmanStep>> stepMap = stepCache.get(chessman);
         if (stepMap == null){

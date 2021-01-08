@@ -7,8 +7,8 @@ class CreateTreeTest {
     static CreateTree tree1;
     @BeforeAll
     static void init(){
-        tree1 = new CreateTree(9388466791617420L);
-//        tree1 = new CreateTree(9640613352197776L);
+//        tree1 = new CreateTree(9388466791617420L);
+        tree1 = new CreateTree(18387170901632856L);
     }
     @Test
     void printAllStep() {

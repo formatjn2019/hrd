@@ -1,13 +1,10 @@
 package hrd.io;
 
-import hrd.modle.Chessboard;
 import hrd.modle.ChessboardItem;
 
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -17,26 +14,22 @@ import static hrd.io.IOConstantUtils.*;
 
 public class ReadChessboards {
 
-    private static final ReadChessboards instance=new ReadChessboards();
+    private ReadChessboards(){}
 
-    private ReadChessboards(){
-
-    }
-
-
-    //返回实例
-    public static ReadChessboards getInstance(){
-        return instance;
-    }
-    //读取chessboar数据放入缓存
-    public void readChessboard(){
+    /**
+     * 读取棋局数据数据放入缓存
+     */
+    public static void readChessboard(){
         Map<Long, ChessboardItem> chessboardItemMap = IOConstantUtils.getChessboardItemMap();
-
         chessboardItemMap.putAll(readChessboard(FILE_NAME));
     }
 
-    //读取chessboar数据放入缓存
-    public Map<Long, ChessboardItem> readChessboard(String fileName){
+    /**
+     * 读取指定棋局数据
+     * @param fileName  文件名
+     * @return 文件中的棋局
+     */
+    public static Map<Long, ChessboardItem> readChessboard(String fileName){
         Map<Long, ChessboardItem> resultMap = new HashMap<>();
         try(BufferedReader br =Files.newBufferedReader(LOCAL_PATH.resolve(fileName), Charset.forName(CHARSET))) {
             String line = br.readLine();
@@ -50,12 +43,18 @@ public class ReadChessboards {
         }
         return  resultMap;
     }
-    //读取Mirror缓存文件
-    public Set<Long> readMirrors(){
+
+    /**
+     * 读取Mirror缓存文件
+     * @return 返回MirrorSet
+     */
+    public static Set<Long> readMirrors(){
         return readMirrors(CASHE_NAME);
-    }
-    //读取Mirror缓存文件
-    public Set<Long> readMirrors(String fileName){
+    }/**
+     * 读取指定名称中Mirror缓存文件
+     * @return 返回MirrorSet
+     */
+    public static Set<Long> readMirrors(String fileName){
         Set<Long> resultSet = new HashSet<>();
         try(BufferedReader br =Files.newBufferedReader(LOCAL_PATH.resolve(fileName), Charset.forName(CHARSET))) {
             String line;

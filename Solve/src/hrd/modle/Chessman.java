@@ -20,6 +20,19 @@ public enum Chessman {
     兵4('j',BING);
 
 
+    private final char id;
+    private final ChessmanType type;
+
+    /**
+     * 棋局类型
+     * @param id    id 唯一表示，可用于棋局显示
+     * @param type  类型
+     */
+    Chessman(char id, ChessmanType type) {
+        this.id = id;
+        this.type = type;
+    }
+
     public enum ChessmanType{
         CAO(2, 2),
         HENG(2, 1),
@@ -41,6 +54,13 @@ public enum Chessman {
             return height;
         }
     }
+
+    /**
+     * 根据id和类型获取棋子
+     * @param id id
+     * @param chessmanType 棋子类型
+     * @return 枚举类型的棋子
+     */
     public static Chessman getInstanceByID(char id,ChessmanType chessmanType) {
         return switch (id) {
             case 'a' -> 曹操;
@@ -58,12 +78,6 @@ public enum Chessman {
     }
 
 
-    private final char id;
-    private final ChessmanType type;
-    Chessman(char id, ChessmanType type) {
-        this.id = id;
-        this.type = type;
-    }
 
     public char getId() {
         return id;

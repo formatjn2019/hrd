@@ -5,7 +5,13 @@ import java.util.HashMap;
 public class Corrdinate {
     private static final HashMap<Short,Corrdinate> coordinateCashe = new HashMap<>();
     private int hashCode=Integer.MAX_VALUE;
-    //减少对象的生成，缓存已经生成的对象
+
+    /**
+     * 减少对象的生成，缓存已经生成的对象
+     * @param x 横坐标
+     * @param y 纵坐标
+     * @return  返回已生成的坐标
+     */
     public static Corrdinate getInstance(byte x,byte y){
         Short key= (short)(x << 8 | (y & 0xFF));
         Corrdinate corrdinate =coordinateCashe.get(key);
@@ -23,6 +29,12 @@ public class Corrdinate {
         this.y_coordinate =  y_coordinate;
     }
 
+    /**
+     * 移动指定步骤
+     * 忽略棋子宽高
+     * @param step  步骤
+     * @return  返回新的坐标
+     */
     public Corrdinate moveStep(Step step){
         return switch (step.getDir()) {
             case UP -> getInstance(this.x_coordinate, (byte) (this.y_coordinate - step.getLen()));
@@ -35,6 +47,14 @@ public class Corrdinate {
             case DOWNRIGHT -> getInstance((byte) (this.x_coordinate+step.getLen()), (byte) (this.y_coordinate + step.getLen()));
         };
     }
+
+    /**
+     * 移动指定步骤
+     * 不忽略棋子宽高
+     * @param step      步骤
+     * @param chessman  棋子
+     * @return          返回新的坐标
+     */
     public Corrdinate moveStep(Step step, Chessman chessman){
         return switch (step.getDir()) {
             case UP -> getInstance(this.x_coordinate, (byte) (this.y_coordinate - step.getLen()-(chessman.getType().getHeight()-1)));

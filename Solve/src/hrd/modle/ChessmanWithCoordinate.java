@@ -32,6 +32,12 @@ public class ChessmanWithCoordinate implements Comparable<ChessmanWithCoordinate
         return ( i << 24 | (coordinate.hashCode() & 0xFFFF) <<8 | (chessman.getId() & 0xFF ));
     }
 
+    /**
+     * 获取缓存的棋子或者生成新的棋子
+     * @param chessman      棋子类型
+     * @param corrdinate    坐标
+     * @return              返回缓存的棋子
+     */
     public static ChessmanWithCoordinate getInstance(Chessman chessman, Corrdinate corrdinate){
         Map<Corrdinate, ChessmanWithCoordinate> corrdinateMap = chessmanCashe.get(chessman);
         ChessmanWithCoordinate chessmanWithCoordinate;

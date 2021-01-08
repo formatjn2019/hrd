@@ -9,13 +9,26 @@ public class Chessboard {
     private long adjectiveMirror=0L;
     private final Map<Chessman,ChessmanWithCoordinate> chessmans ;
 
-    //采用棋子数组初始化
+
+
+    /**
+     * 采用棋子数组初始化
+     * 用于新步骤的生成或者手动棋局的生成
+     * @param chessmanMap 棋子字典，采用EnumMap
+     */
     public Chessboard(Map<Chessman,ChessmanWithCoordinate> chessmanMap) {
         chessmans=chessmanMap;
     }
 
-    //采用长整型初始化
-    //方便移动和存储
+
+
+    /**
+     * 采用长整型初始化
+     * 方便移动和存储
+     * 用于已有棋局的加载
+     * @param chessmanMap 空的棋子字典
+     * @param state 状态
+     */
     public Chessboard(Map<Chessman,ChessmanWithCoordinate> chessmanMap,long state){
         this.state=state;
         chessmans = chessmanMap;
@@ -42,7 +55,7 @@ public class Chessboard {
     public Map<Chessman, ChessmanWithCoordinate> getChessmans() {
         return chessmans;
     }
-    //使用映像 约360ms
+    //使用映像 速度明显加快很多不止百倍
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -50,13 +63,7 @@ public class Chessboard {
         Chessboard that = (Chessboard) o;
         return (this.getMirror() == that.getMirror()) || (this.getAdjectiveMirror() == that.getMirror());
     }
-//    //不使用映像，仅判断非重复节点 约14min 10s 68 ms
-////    @Override
-////    public boolean equals(Object o) {
-////        if (this == o) return true;
-////        Chessboard that = (Chessboard) o;
-////        return (this.getState() == that.getState());
-////    }
+
     //重写hashcode方法但不一定完全散列
     @Override
     public int hashCode() {
@@ -80,7 +87,9 @@ public class Chessboard {
     }
 
 
-    //获取棋局状态
+    /**
+     * 获取棋局状态
+     */
     public long getState() {
         if (this.state == 0){
             long temp = 0;
@@ -100,7 +109,9 @@ public class Chessboard {
         return state;
     }
 
-    //计算映像
+    /**
+     * 计算映像
+     */
     public long calculateMirror(Map<Chessman,ChessmanWithCoordinate> chessmanMap){
         long temp=0;
         Collection<ChessmanWithCoordinate> values = chessmanMap.values();
@@ -113,8 +124,9 @@ public class Chessboard {
     }
 
 
-
-    //计算棋局镜像
+    /**
+     * 计算棋局镜像
+     */
     public long getMirror() {
         if (this.mirror == 0){
             //计算镜像
@@ -122,7 +134,12 @@ public class Chessboard {
         }
         return this.mirror;
     }
-    //计算对称棋局的镜像
+
+
+    /**
+     * 计算对称棋局的镜像
+     * @return 对称棋局的镜像
+     */
     public long getAdjectiveMirror(){
         if (this.adjectiveMirror == 0){
             //计算对称镜像
@@ -164,10 +181,11 @@ public class Chessboard {
 
         return "Chessboard{" +
                 "status=" + getState() +
-//                ", mirror=" + getMirror()+
-//                ", adjectiveMirror=" + getAdjectiveMirror()+
+                ", mirror=" + getMirror()+
+                ", adjectiveMirror=" + getAdjectiveMirror()+
                 '\n'+
                 sb.toString()+
-                '}';
+                '}'
+                +"\n";
     }
 }

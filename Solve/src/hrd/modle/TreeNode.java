@@ -6,7 +6,11 @@ import java.util.LinkedList;
 import java.util.Set;
 
 import static hrd.modle.ChessmanStep.SpaceChanged.*;
-//只用来辅助计算，常用方法转发chessboar的
+
+/**
+ * 树的节点，用于生成树
+ * 常用转发chessboar的方法
+ */
 public class TreeNode {
     private final TreeNode parent;
     private final Chessboard chessboard;
@@ -14,16 +18,26 @@ public class TreeNode {
     private final Corrdinate space1;
     private final Corrdinate space2;
 
-    //测试使用
+    /**
+     * 克隆棋盘数组
+     * @return 返回新的数组
+     */
     public char[][] getChessboardArr() {
         return new char[][]{chessboardArr[0].clone(),chessboardArr[1].clone(),chessboardArr[2].clone(),chessboardArr[3].clone(),chessboardArr[4].clone()};
     }
-    //测试使用
+
+    /**
+     * 获取父节点
+     * @return  返回父节点
+     */
     public TreeNode getParent() {
         return parent;
     }
 
-    //为根结点进行初始化
+    /**
+     * 为根结点进行初始化
+     * @param bootChessboard    根结点
+     */
     public TreeNode(Chessboard bootChessboard){
         this.chessboard=bootChessboard;
         this.parent = null;
@@ -54,7 +68,11 @@ public class TreeNode {
         space1 = temp1;
         space2 = temp2;
     }
-    //根据步骤进行初始化
+    /**
+     * 根据步骤步骤进行初始化
+     * @param parent        父节点
+     * @param chessmanStep  棋子的步骤
+     */
     public TreeNode(TreeNode parent, ChessmanStep chessmanStep){
         this.parent=parent;
         char[][] parentChessboardArrClone=parent.getChessboardArr();
@@ -71,43 +89,38 @@ public class TreeNode {
             }
             case SP2 -> {
                 space1=parent.space1;
-//                Chessman chessman111 =chessmanStep.getChessman();
-//                Step oppoisteStep = chessmanStep.getStep().getOppoisteStep();
-//
-//                space2=parent.space2.moveStep(oppoisteStep,chessman111);
                 space2=parent.space2.moveStep(chessmanStep.getStep().getOppoisteStep(),chessmanStep.getChessman());
             }
+            //移动宽为2的情况
             case SP12 -> {
                 space1=parent.space1.moveStep(chessmanStep.getStep().getOppoisteStep(),chessmanStep.getChessman());
                 space2=parent.space2.moveStep(chessmanStep.getStep().getOppoisteStep(),chessmanStep.getChessman());
             }
+
+            //忽略厚度，用于移动两步的情况
             default -> {
-                //忽略厚度，用于移动两步
                 space1=parent.space1.moveStep(chessmanStep.getStep().getOppoisteStep());
                 space2=parent.space2.moveStep(chessmanStep.getStep().getOppoisteStep());
             }
         }
         enumMap.put(chessmanStep.getChessman(),afterChangeChessman);
         this.chessboard=new Chessboard(enumMap);
-
+//      测试使用
 //        System.out.println("parent:"+parent);
 //        System.out.println("step:"+chessmanStep);
 
-        //节点辅助数组更改
-//        int count=0;
         for (int i = afterChangeChessman.getYcoordinate();i<afterChangeChessman.getYcoordinate()+afterChangeChessman.getHeight();i++){
             for (int j = afterChangeChessman.getXcoordinate();j<afterChangeChessman.getXcoordinate()+afterChangeChessman.getWidth();j++){
                 parentChessboardArrClone[i][j]=afterChangeChessman.getId();
-//                count++;
             }
         }
-//        System.out.println(afterChangeChessman+""+count);
+
         parentChessboardArrClone[space1.getY_coordinate()][space1.getX_coordinate()]='\0';
         parentChessboardArrClone[space2.getY_coordinate()][space2.getX_coordinate()]='\0';
 
 
         this.chessboardArr=parentChessboardArrClone;
-//        //测试使用
+//        测试使用
 //        System.out.println("this:"+this);
     }
 
@@ -151,6 +164,7 @@ public class TreeNode {
                 //dirs[i]为当前方向
                 corrent=dirs[i];
                 Chessman nowChessman = this.getChessmanById(corrent);
+                //为性能考虑，未使用optinnal进行判断
                 if(nowChessman == null){
                     continue;
                 }
@@ -196,91 +210,12 @@ public class TreeNode {
         return resultSteps;
     }
 
-    //获取该节点能获得的所有步骤
-    public LinkedList<ChessmanStep> getSteps2(){
-        LinkedList<ChessmanStep> resultSteps= new LinkedList<>();
-        Corrdinate []spaces= {space1,space2};
-        ChessmanStep.SpaceChanged [] spaceChangeds={SP1,SP2};
-        //当前字符
-        char corrent;
-        //方向字符
-        char[]dirs=new char[4];
-        //方向长度
-        int[] lenth =new int[2];
-        Step[] directions={Step.UP1,Step.RIGHT1,Step.DOWN1,Step.LEFT1,Step.UP2,Step.RIGHT2,Step.DOWN2,Step.LEFT2,Step.UPLEFT1,Step.UPRIGHT1,Step.DOWNRIGHT1,Step.DOWNLEFT1};
-        for (int correntSprace=0;correntSprace<2;correntSprace++) {
-            for (Corrdinate judgeCorrdinat : getAllJudgeCorrdinates(spaces[correntSprace])) {
-                corrent = chessboardArr[judgeCorrdinat.getY_coordinate()][judgeCorrdinat.getX_coordinate()];
-                Chessman nowChessman = this.getChessmanById(corrent);
-                dirs[0] = searchChessmanId(judgeCorrdinat, Step.UP1);
-                dirs[1] = searchChessmanId(judgeCorrdinat, Step.RIGHT1);
-                dirs[2]= searchChessmanId(judgeCorrdinat, Step.DOWN1);
-                dirs[3] = searchChessmanId(judgeCorrdinat, Step.LEFT1);
-                lenth[0] = nowChessman.getType().getWidth();
-                lenth[1] = nowChessman.getType().getHeight();
-                for (int i=0;i<4;i++){
-                    //dirs[i]为当前方向
-                    //当前方向有空位
-                    if (dirs[i]== '\0') {
-                        //与当前方向呈直角为1
-                        if (lenth[i%2]==1){
-                            //加入当前方向
-                            resultSteps.add(ChessmanStep.getInstance(nowChessman,directions[i],spaceChangeds[correntSprace]));
-                            //与当前方向平行为1
-                            if (lenth[(i+1)%2]==1){
-                                //同方向移动两步
-                                if (searchChessmanId(judgeCorrdinat, directions[i+4]) == '\0') {
-                                    resultSteps.add(ChessmanStep.getInstance(nowChessman,directions[i+4], spaceChangeds[1 - correntSprace]));
-                                }
-                            }
-                            //与当前方向平行为2
-                            else {
-                                //同方向移动两步
-                                if (searchChessmanId(judgeCorrdinat, directions[i+4]) == '\0') {
-                                    resultSteps.add(ChessmanStep.getInstance(nowChessman,directions[i+4], SP21));
-                                }
-                            }
-                            //判断逆时针45度方向
-                            if(searchChessmanId(judgeCorrdinat,directions[i+8]) == '\0'){
-                                resultSteps.add(ChessmanStep.getInstance(nowChessman,directions[i+8],spaceChangeds[1-correntSprace]));
-                            }
-                            //判断顺时针45度方向
-                            if(searchChessmanId(judgeCorrdinat,directions[(i+1)%4+8]) == '\0'){
-                                resultSteps.add(ChessmanStep.getInstance(nowChessman,directions[(i+1)%4+8],spaceChangeds[1-correntSprace]));
-                            }
-                        }
-                        //与当前方向呈直角为2
-                        else {
-                            //判断逆时针45度方向
-                            if(searchChessmanId(judgeCorrdinat,directions[i+8]) == '\0'){
-                                resultSteps.add(ChessmanStep.getInstance(nowChessman,directions[i],SP12));
-                            }
-                        }
-
-                    }
-                }
-
-            }
-        }
-        return resultSteps;
-    }
-
-    private Set<Corrdinate> getAllJudgeCorrdinates(Corrdinate space) {
-        Set<Corrdinate> corrdinates=new HashSet<>();
-        //上下左右
-        byte[][] dirs ={{0,-1},{0,1},{-1,0},{1,0}};
-        int x,y;
-        for(byte [] dir: dirs){
-            x=space.getX_coordinate()+dir[0];
-            y=space.getY_coordinate()+dir[1];
-            if (x >=0 && x<4 && y>=0 && y<5){
-                corrdinates.add(Corrdinate.getInstance((byte)x,(byte)y));
-            }
-        }
-        return corrdinates;
-    }
-
-    //现在为搜索标准type，根据坐标找对应位置是否为空
+    /**
+     * 搜索以坐标移动目标位置的棋子类型
+     * @param corrdinate    搜索坐标
+     * @param step          移动的步骤
+     * @return              搜索到的坐标，若越界则返回'0'
+     */
     private char searchChessmanId(Corrdinate corrdinate, Step step){
         int x = corrdinate.getX_coordinate(),y = corrdinate.getY_coordinate();
         switch (step.getDir()){
@@ -299,21 +234,14 @@ public class TreeNode {
         return this.chessboardArr[y][x];
     }
 
-
-
-    public Corrdinate getSpace1() {
-        return space1;
-    }
-
-    public Corrdinate getSpace2() {
-        return space2;
-    }
-
     public Chessboard getChessboard() {
         return chessboard;
     }
 
-    //终止节点
+    /**
+     * 判断是否达到终止节点
+     * @return  true代表终止节点
+     */
     public boolean isEndNode(){
         ChessmanWithCoordinate chessman = chessboard.getChessmans().get(Chessman.曹操);
         return chessman.getXcoordinate() == 1 && chessman.getYcoordinate() ==3;

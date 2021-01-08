@@ -47,6 +47,12 @@ public enum Step {
         };
     }
 
+    /**
+     * 获取枚举的步骤
+     * @param dir   方向
+     * @param len   长度
+     * @return      返回枚举长度
+     */
     public static Step getInstance(Direction dir,int len) {
         switch (dir) {
             case UP -> {
@@ -65,6 +71,12 @@ public enum Step {
         return null;
     }
 
+    /**
+     * 返回枚举的长度
+     * @param dir   方向1
+     * @param dir2  方向2
+     * @return      返回枚举长度
+     */
     public static Step getInstance(Direction dir,Direction dir2) {
         switch (dir) {
             case UP -> {
@@ -111,10 +123,18 @@ public enum Step {
         return null;
     }
 
+    /**
+     * 获取方向
+     * @return 枚举的方向
+     */
     public Direction getDir() {
         return dir;
     }
 
+    /**
+     * 获取长度
+     * @return 返回长度
+     */
     public byte getLen() {
         return len;
     }
