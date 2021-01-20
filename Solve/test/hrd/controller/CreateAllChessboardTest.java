@@ -1,20 +1,31 @@
 package hrd.controller;
 
 import hrd.io.IOConstantUtils;
+import hrd.io.ReadChessboards;
 import hrd.io.WriteChessboards;
 import hrd.modle.Chessboard;
 import hrd.modle.ChessboardItem;
 import org.junit.jupiter.api.Test;
 
+import javax.xml.namespace.QName;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class CreateAllChessboardTest {
 
+
+    @Test
+    void getAlltypeWithChcheSingle() {
+        Set<Chessboard> alltypeWithChche = CreateAllChessboard.getAlltypeWithChche(16, new HashSet<>());
+        ArrayList<Chessboard> chessboards=new ArrayList<>(alltypeWithChche);
+        System.out.println(chessboards.size());
+    }
+
     @Test
     void getAlltypeWithChche() {
         int []types={0,16,24,28,30,31};
+//        int []types={28,30,31};
         HashMap<Long,ChessboardItem> totalLeafMap=new HashMap<>();
         for(int type : types){
             long start=System.currentTimeMillis();
@@ -56,4 +67,29 @@ class CreateAllChessboardTest {
         WriteChessboards.getInstance().writeChessbards();
     }
 
+    @Test
+    void margainDATA() {
+        int []types={0,16,24,28,30,31};
+        String []names = new String[6];
+        String []names2 = new String[6];
+        for (int i =0;i<6;i++){
+            names[i]="chessboards_"+types[i]+".csv";
+            names2[i]=names[i].replaceAll("\\.","_leafs.");
+        }
+//        System.out.println(names2[0]);
+        WriteChessboards.writeChessbards("chessboards.csv",readMaps(names));
+        WriteChessboards.writeChessbards("totalLeafChessboards.csv",readMaps(names2));
+
+
+    }
+    Map<Long,ChessboardItem> readMaps(String [] names){
+
+        Map<Long, ChessboardItem> resultMap = new HashMap<>();
+
+        for (String name :names){
+            Map<Long, ChessboardItem> tempMap = ReadChessboards.readChessboard(name);
+            resultMap.putAll(tempMap);
+        }
+        return resultMap;
+    }
 }

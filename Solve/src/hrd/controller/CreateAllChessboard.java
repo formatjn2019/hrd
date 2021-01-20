@@ -53,8 +53,8 @@ public class CreateAllChessboard {
             resultSet.add(new Chessboard(chessmanMap));
         }else {
 
-            for(byte y=0;y<6-chessmans[index].getType().getWidth();y++){
-                for (byte x=0;x<5-chessmans[index].getType().getHeight();x++){
+            for(byte y=0;y<6-chessmans[index].getType().getHeight();y++){
+                for (byte x=0;x<5-chessmans[index].getType().getWidth();x++){
                     boolean continueFlag=true;
                     outter:
                     for (int ty =y;ty<y+chessmans[index].getType().getHeight();ty++){

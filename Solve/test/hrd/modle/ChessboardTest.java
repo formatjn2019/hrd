@@ -12,16 +12,16 @@ class ChessboardTest {
     @BeforeAll
     static void init(){
         EnumMap<Chessman, ChessmanWithCoordinate> chessmans = new EnumMap<>(Chessman.class);
-        ChessmanWithCoordinate caocao= ChessmanWithCoordinate.getInstance(Chessman.曹操, Corrdinate.getInstance((byte) 0,(byte) 2));
-        ChessmanWithCoordinate guanyu= ChessmanWithCoordinate.getInstance(Chessman.关羽1, Corrdinate.getInstance((byte) 0,(byte) 1));
-        ChessmanWithCoordinate zhangfei= ChessmanWithCoordinate.getInstance(Chessman.张飞2, Corrdinate.getInstance((byte) 3,(byte) 3));
+        ChessmanWithCoordinate caocao= ChessmanWithCoordinate.getInstance(Chessman.曹操, Corrdinate.getInstance((byte) 1,(byte) 0));
+        ChessmanWithCoordinate guanyu= ChessmanWithCoordinate.getInstance(Chessman.关羽1, Corrdinate.getInstance((byte) 1,(byte) 2));
+        ChessmanWithCoordinate zhangfei= ChessmanWithCoordinate.getInstance(Chessman.张飞2, Corrdinate.getInstance((byte) 0,(byte) 0));
         ChessmanWithCoordinate zhaoyun= ChessmanWithCoordinate.getInstance(Chessman.赵云2, Corrdinate.getInstance((byte) 3,(byte) 0));
-        ChessmanWithCoordinate macao= ChessmanWithCoordinate.getInstance(Chessman.马超2, Corrdinate.getInstance((byte) 2,(byte) 1));
-        ChessmanWithCoordinate huangzhong= ChessmanWithCoordinate.getInstance(Chessman.黄忠2, Corrdinate.getInstance((byte) 2,(byte) 3));
-        ChessmanWithCoordinate bing1= ChessmanWithCoordinate.getInstance(Chessman.兵1, Corrdinate.getInstance((byte) 1,(byte) 0));
+        ChessmanWithCoordinate macao= ChessmanWithCoordinate.getInstance(Chessman.马超2, Corrdinate.getInstance((byte) 0,(byte) 2));
+        ChessmanWithCoordinate huangzhong= ChessmanWithCoordinate.getInstance(Chessman.黄忠2, Corrdinate.getInstance((byte) 3,(byte) 2));
+        ChessmanWithCoordinate bing1= ChessmanWithCoordinate.getInstance(Chessman.兵1, Corrdinate.getInstance((byte) 0,(byte) 4));
         ChessmanWithCoordinate bing2= ChessmanWithCoordinate.getInstance(Chessman.兵2, Corrdinate.getInstance((byte) 1,(byte) 4));
-        ChessmanWithCoordinate bing3= ChessmanWithCoordinate.getInstance(Chessman.兵3, Corrdinate.getInstance((byte) 0,(byte) 4));
-        ChessmanWithCoordinate bing4= ChessmanWithCoordinate.getInstance(Chessman.兵4, Corrdinate.getInstance((byte) 3,(byte) 2));
+        ChessmanWithCoordinate bing3= ChessmanWithCoordinate.getInstance(Chessman.兵3, Corrdinate.getInstance((byte) 2,(byte) 4));
+        ChessmanWithCoordinate bing4= ChessmanWithCoordinate.getInstance(Chessman.兵4, Corrdinate.getInstance((byte) 3,(byte) 4));
         chessmans.put(Chessman.曹操,caocao);
         chessmans.put(Chessman.关羽1,guanyu);
         chessmans.put(Chessman.张飞2,zhangfei);
