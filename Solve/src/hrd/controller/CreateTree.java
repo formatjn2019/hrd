@@ -112,9 +112,9 @@ public class CreateTree {
     private TreeNode createlayerTree(ArrayList<TreeNode> nodes,int level){
         ArrayList<TreeNode> newNodes = new ArrayList<>();
         List<Future<List<TreeNode>>> futureTask=new ArrayList<>();
-        int stepLenth=nodes.size()%CORE==0?nodes.size()/CORE:nodes.size()/CORE+1;
+        int stepLenth=nodes.size()/CORE;
         //太少了的时候，不进行多线程分割
-        if (stepLenth<5){
+        if (stepLenth<3){
             for (TreeNode node : nodes){
                 for (ChessmanStep newstep : node.getSteps()){
                     TreeNode newNode = new TreeNode(node,newstep);
@@ -139,8 +139,9 @@ public class CreateTree {
                 }
             }
         }else {
-            for (int i = 0;i<CORE;i++){
-                List<TreeNode> subList  = nodes.subList(i*stepLenth, Math.min((i + 1) * stepLenth, nodes.size()));
+            for (int i = 0,j=nodes.size()%CORE,start=0,end;i<CORE;i++,j--,start=end){
+                end=start+(j>0?stepLenth+1:stepLenth);
+                List<TreeNode> subList  = nodes.subList(start,end);
                 Future<List<TreeNode>> future = executorService.submit(new CalculateNewNodes(subList));
                 futureTask.add(future);
             }
