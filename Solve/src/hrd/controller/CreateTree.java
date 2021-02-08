@@ -7,6 +7,7 @@ import hrd.modle.ChessmanStep;
 import hrd.modle.TreeNode;
 
 import java.util.*;
+import java.util.concurrent.*;
 
 public class CreateTree {
     private final Set<Chessboard> chessboardSet;
@@ -14,13 +15,17 @@ public class CreateTree {
     private final StringBuffer message=new StringBuffer();
     private final Stack<Chessboard> stack = new Stack<>();
     private int totalStep=0;
+    private static final int CORE =Runtime.getRuntime().availableProcessors();
+    private final ExecutorService executorService =Executors.newFixedThreadPool(CORE);
+    private TreeNode endNode;
+    private volatile boolean endFlag;
 
     /**
      * 建树初始化
      * @param state 长整型，状态
      */
     public CreateTree(long state){
-        chessboardSet =new HashSet<>();
+        chessboardSet = Collections.newSetFromMap(new ConcurrentHashMap<>());
         root = new Chessboard(new EnumMap<>(Chessman.class), state);
     }
 
@@ -66,6 +71,37 @@ public class CreateTree {
         return true;
     }
 
+    private class CalculateNewNodes implements Callable<List<TreeNode>> {
+        private final List<TreeNode> treeNodes ;
+
+        //分块计算
+        public CalculateNewNodes(List<TreeNode> treeNodes) {
+            this.treeNodes = treeNodes;
+        }
+
+        @Override
+        public List<TreeNode> call(){
+            ArrayList<TreeNode> newNodes = new ArrayList<>();
+            for (TreeNode treeNode:treeNodes){
+                for (ChessmanStep step : treeNode.getSteps()) {
+                    TreeNode newNode = new TreeNode(treeNode, step);
+                    if (chessboardSet.add(newNode.getChessboard())) {
+                        if (newNode.isEndNode()){
+                            endNode=newNode;
+                            endFlag = true;
+                            return newNodes;
+                        }else {
+                            newNodes.add(newNode);
+                        }
+                    }
+                }
+            }
+            return newNodes;
+        }
+
+    }
+
+
     /**
      * 通过建树方法进行计算
      * 使用分支限界算法，广度优先遍历，递归
@@ -75,29 +111,50 @@ public class CreateTree {
      */
     private TreeNode createlayerTree(ArrayList<TreeNode> nodes,int level){
         ArrayList<TreeNode> newNodes = new ArrayList<>();
-        for (TreeNode node : nodes){
-            for (ChessmanStep step : node.getSteps()){
-                TreeNode newNode = new TreeNode(node,step);
-                if (chessboardSet.add(newNode.getChessboard())){
-                    newNodes.add(newNode);
+        List<Future<List<TreeNode>>> futureTask=new ArrayList<>();
+        int stepLenth=nodes.size()%CORE==0?nodes.size()/CORE:nodes.size()/CORE+1;
+        //太少了的时候，不进行多线程分割
+        if (stepLenth<5){
+            for (TreeNode node : nodes){
+                for (ChessmanStep newstep : node.getSteps()){
+                    TreeNode newNode = new TreeNode(node,newstep);
+                    if (chessboardSet.add(newNode.getChessboard())){
+                        newNodes.add(newNode);
+                    }
+                    if (newNode.isEndNode()){
+                        message.append("level: ");
+                        message.append(level);
+                        message.append('\t');
+                        message.append("newNodes: ");
+                        message.append(newNodes.size());
+                        message.append("\n");
+                        totalStep+=newNodes.size();
+                        message.insert(0,"计算成功");
+                        message.insert(0,"totalNode:"+chessboardSet.size()+"\n");
+                        message.insert(0,"totalStep:"+totalStep+"\n");
+                        //消除引用，节省内存
+                        chessboardSet.clear();
+                        return newNode;
+                    }
                 }
-                if (newNode.isEndNode()){
-                    message.append("level: ");
-                    message.append(level);
-                    message.append('\t');
-                    message.append("newNodes: ");
-                    message.append(newNodes.size());
-                    message.append("\n");
-                    totalStep+=newNodes.size();
-                    message.insert(0,"计算成功");
-                    message.insert(0,"totalNode:"+chessboardSet.size()+"\n");
-                    message.insert(0,"totalStep:"+totalStep+"\n");
-                    //消除引用，节省内存
-                    chessboardSet.clear();
-                    return newNode;
+            }
+        }else {
+            for (int i = 0;i<CORE;i++){
+                List<TreeNode> subList  = nodes.subList(i*stepLenth, Math.min((i + 1) * stepLenth, nodes.size()));
+                Future<List<TreeNode>> future = executorService.submit(new CalculateNewNodes(subList));
+                futureTask.add(future);
+            }
+
+            for (Future<List<TreeNode>> future:futureTask){
+                try {
+                    newNodes.addAll(future.get());
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
                 }
             }
         }
+
+
         if (newNodes.size() == 0){
             message.insert(0,"计算失败");
             message.insert(0,"totalNode:"+chessboardSet.size()+"\n");
@@ -114,6 +171,9 @@ public class CreateTree {
         message.append(newNodes.size());
         message.append("\n");
         totalStep+=newNodes.size();
+        if(endFlag){
+            return endNode;
+        }
         return createlayerTree(newNodes,level+1);
     }
 
