@@ -8,18 +8,21 @@ import hrd.modle.TreeNode;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class CreateTree {
     private final Set<Chessboard> chessboardSet;
     private final Chessboard root;
     private final StringBuffer message=new StringBuffer();
     private final Stack<Chessboard> stack = new Stack<>();
+    private final Object object = new Object();
     private int totalStep=0;
     private static final int CORE =Runtime.getRuntime().availableProcessors();
-    private final ExecutorService executorService =Executors.newFixedThreadPool(CORE);
     private TreeNode endNode;
     private volatile boolean endFlag;
-
+    public static AtomicLong waitingThread = new AtomicLong(0L);
+    public static AtomicLong atomicLong = new AtomicLong(0L);
+    private final ConcurrentLinkedQueue<TreeNode> calculatingTreeNodes = new ConcurrentLinkedQueue<>();
     /**
      * 建树初始化
      * @param state 长整型，状态
@@ -53,14 +56,8 @@ public class CreateTree {
      */
     public boolean calculateResult(){
         TreeNode root = new TreeNode(this.root);
-        ArrayList<TreeNode> nodes = new ArrayList<>();
-        nodes.add(root);
-        //当前节点，直接返回
-        if (root.isEndNode()){
-            stack.add(root.getChessboard());
-            return true;
-        }
-        TreeNode endNode = createlayerTree(nodes,1);
+        calculatingTreeNodes.add(root);
+        TreeNode endNode = createlayerTree();
         if (endNode == null){
             return false;
         }
@@ -71,111 +68,78 @@ public class CreateTree {
         return true;
     }
 
-    private class CalculateNewNodes implements Callable<List<TreeNode>> {
-        private final List<TreeNode> treeNodes ;
+    private class CalculateNewNodes implements Runnable {
 
-        //分块计算
-        public CalculateNewNodes(List<TreeNode> treeNodes) {
-            this.treeNodes = treeNodes;
+        public CalculateNewNodes() {
+            atomicLong.incrementAndGet();
+        }
+
+
+        @Override
+        protected void finalize() throws Throwable {
+            atomicLong.decrementAndGet();
+            super.finalize();
         }
 
         @Override
-        public List<TreeNode> call(){
-            ArrayList<TreeNode> newNodes = new ArrayList<>();
-            for (TreeNode treeNode:treeNodes){
-                for (ChessmanStep step : treeNode.getSteps()) {
-                    TreeNode newNode = new TreeNode(treeNode, step);
-                    if (chessboardSet.add(newNode.getChessboard())) {
+        public void run() {
+            while (waitingThread.get()!=CORE) {
+                TreeNode node = calculatingTreeNodes.poll();
+                if (node==null){
+                    waitingThread.incrementAndGet();
+                    //如果队列为空，则进入等待状态
+                    synchronized (object){
+                        try {
+                            object.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    waitingThread.decrementAndGet();
+                }else {
+                    for (ChessmanStep newstep : node.getSteps()){
+                        TreeNode newNode = new TreeNode(node,newstep);
+                        if (chessboardSet.add(newNode.getChessboard())){
+                            calculatingTreeNodes.add(newNode);
+                            if (waitingThread.get()>0){
+                                synchronized (object){
+                                    object.notifyAll();
+                                }
+                            }
+                        }
                         if (newNode.isEndNode()){
+                            endFlag=true;
                             endNode=newNode;
-                            endFlag = true;
-                            return newNodes;
-                        }else {
-                            newNodes.add(newNode);
+                            waitingThread.incrementAndGet();
+                            break;
                         }
                     }
                 }
             }
-            return newNodes;
         }
-
     }
 
 
     /**
      * 通过建树方法进行计算
      * 使用分支限界算法，广度优先遍历，递归
-     * @param nodes 新的节点数
-     * @param level 树的层数
      * @return 返回计算后的最终节点
      */
-    private TreeNode createlayerTree(ArrayList<TreeNode> nodes,int level){
-        ArrayList<TreeNode> newNodes = new ArrayList<>();
-        List<Future<List<TreeNode>>> futureTask=new ArrayList<>();
-        int stepLenth=nodes.size()/CORE;
-        //太少了的时候，不进行多线程分割
-        if (stepLenth<3){
-            for (TreeNode node : nodes){
-                for (ChessmanStep newstep : node.getSteps()){
-                    TreeNode newNode = new TreeNode(node,newstep);
-                    if (chessboardSet.add(newNode.getChessboard())){
-                        newNodes.add(newNode);
-                    }
-                    if (newNode.isEndNode()){
-                        message.append("level: ");
-                        message.append(level);
-                        message.append('\t');
-                        message.append("newNodes: ");
-                        message.append(newNodes.size());
-                        message.append("\n");
-                        totalStep+=newNodes.size();
-                        message.insert(0,"计算成功");
-                        message.insert(0,"totalNode:"+chessboardSet.size()+"\n");
-                        message.insert(0,"totalStep:"+totalStep+"\n");
-                        //消除引用，节省内存
-                        chessboardSet.clear();
-                        return newNode;
-                    }
-                }
-            }
-        }else {
-            for (int i = 0,j=nodes.size()%CORE,start=0,end;i<CORE;i++,j--,start=end){
-                end=start+(j>0?stepLenth+1:stepLenth);
-                List<TreeNode> subList  = nodes.subList(start,end);
-                Future<List<TreeNode>> future = executorService.submit(new CalculateNewNodes(subList));
-                futureTask.add(future);
-            }
+    private TreeNode createlayerTree(){
 
-            for (Future<List<TreeNode>> future:futureTask){
-                try {
-                    newNodes.addAll(future.get());
-                } catch (InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
-                }
-            }
+        for (int i = 0;i<CORE;i++) new Thread(new CalculateNewNodes()).start();
+
+        while (waitingThread.get() != CORE){
+            Thread.yield();
         }
+        message.append("共生成了");
+        message.append(chessboardSet.size());
+        message.append("节点");
 
-
-        if (newNodes.size() == 0){
-            message.insert(0,"计算失败");
-            message.insert(0,"totalNode:"+chessboardSet.size()+"\n");
-            message.insert(0,"totalStep:"+totalStep+"\n");
-            //消除引用，节省内存
-            chessboardSet.clear();
-            return null;
-        }
-
-        message.append("level: ");
-        message.append(level);
-        message.append('\t');
-        message.append("newNodes: ");
-        message.append(newNodes.size());
-        message.append("\n");
-        totalStep+=newNodes.size();
-        if(endFlag){
-            return endNode;
-        }
-        return createlayerTree(newNodes,level+1);
+        //消除引用，节省内存
+        calculatingTreeNodes.clear();
+        chessboardSet.clear();
+        return endNode;
     }
 
 }

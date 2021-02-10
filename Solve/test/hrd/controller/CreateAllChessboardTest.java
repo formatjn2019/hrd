@@ -24,8 +24,8 @@ class CreateAllChessboardTest {
 
     @Test
     void getAlltypeWithChche() {
-        int []types={0,16,24,28,30,31};
-//        int []types={28,30,31};
+//        int []types={0,16,24,28,30,31};
+        int []types={30,31};
         HashMap<Long,ChessboardItem> totalLeafMap=new HashMap<>();
         for(int type : types){
             long start=System.currentTimeMillis();
@@ -53,6 +53,8 @@ class CreateAllChessboardTest {
                     mirrorList.add(pop.getAdjectiveMirror());
                 }
                 index+=1;
+//                System.out.println(CreateTree.atomicLong.get());
+//                System.out.println(index+""+chessboard);
             }
             for(Long mirror:mirrorList){
                 hashCodeItemMap.remove(mirror);
