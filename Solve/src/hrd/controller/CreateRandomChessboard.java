@@ -14,8 +14,8 @@ public class CreateRandomChessboard {
     /**
      * 获取随机棋局
      *
-     * @param   type 类型，共有0，16，24，28，30，31六种类型
-     * @return  根据当前时间生成随机数制造的棋局，但是不能保证棋局有解
+     * @param type 类型，共有0，16，24，28，30，31六种类型
+     * @return 根据当前时间生成随机数制造的棋局，但是不能保证棋局有解
      */
     public static Optional<Chessboard> getRandomChessboard(int type) {
         Chessman[] chessmans = new Chessman[10];
@@ -62,9 +62,9 @@ public class CreateRandomChessboard {
     /**
      * 获取指定等级棋局
      *
-     * @param   type 棋局类型
-     * @param   step 步骤下限
-     * @return  返回有解的棋局
+     * @param type 棋局类型
+     * @param step 步骤下限
+     * @return 返回有解的棋局
      */
     public static Optional<Chessboard> getRandomChessboard(int type, int step) {
         int total = 0;
@@ -164,7 +164,7 @@ public class CreateRandomChessboard {
     public static Optional<Chessboard> getRandomChessbordWithCache(int type, int step, Set<Long> cachedMirrors) {
         int total = 0;
         while (true) {
-            Optional<Chessboard> optionalChessboard = getRandomChessbordWithCache(type,cachedMirrors);
+            Optional<Chessboard> optionalChessboard = getRandomChessbordWithCache(type, cachedMirrors);
             if (optionalChessboard.isPresent()) {
                 Chessboard randomChessboard = optionalChessboard.get();
                 CreateTree ct = new CreateTree(randomChessboard.getState());

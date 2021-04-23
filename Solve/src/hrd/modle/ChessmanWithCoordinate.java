@@ -6,10 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class ChessmanWithCoordinate implements Comparable<ChessmanWithCoordinate>{
+public class ChessmanWithCoordinate implements Comparable<ChessmanWithCoordinate> {
     private final Chessman chessman;
     private final Corrdinate coordinate;
-    private static final Map<Chessman,Map<Corrdinate,ChessmanWithCoordinate>> chessmanCashe = new EnumMap<>(Chessman.class);
+    private static final Map<Chessman, Map<Corrdinate, ChessmanWithCoordinate>> chessmanCashe = new EnumMap<>(Chessman.class);
 
     @Override
     public boolean equals(Object o) {
@@ -29,36 +29,34 @@ public class ChessmanWithCoordinate implements Comparable<ChessmanWithCoordinate
             case SHU -> 1;
             case BING -> 3;
         };
-        return ( i << 24 | (coordinate.hashCode() & 0xFFFF) <<8 | (chessman.getId() & 0xFF ));
+        return (i << 24 | (coordinate.hashCode() & 0xFFFF) << 8 | (chessman.getId() & 0xFF));
     }
 
     /**
      * 获取缓存的棋子或者生成新的棋子
-     * @param chessman      棋子类型
-     * @param corrdinate    坐标
-     * @return              返回缓存的棋子
+     *
+     * @param chessman   棋子类型
+     * @param corrdinate 坐标
+     * @return 返回缓存的棋子
      */
-    public static ChessmanWithCoordinate getInstance(Chessman chessman, Corrdinate corrdinate){
+    public static ChessmanWithCoordinate getInstance(Chessman chessman, Corrdinate corrdinate) {
         Map<Corrdinate, ChessmanWithCoordinate> corrdinateMap = chessmanCashe.get(chessman);
         ChessmanWithCoordinate chessmanWithCoordinate;
-        if (corrdinateMap  == null){
+        if (corrdinateMap == null) {
             corrdinateMap = new HashMap<>();
-            chessmanCashe.put(chessman,corrdinateMap);
-            chessmanWithCoordinate = new ChessmanWithCoordinate(chessman,corrdinate);
-            corrdinateMap.put(corrdinate,chessmanWithCoordinate);
+            chessmanCashe.put(chessman, corrdinateMap);
+            chessmanWithCoordinate = new ChessmanWithCoordinate(chessman, corrdinate);
+            corrdinateMap.put(corrdinate, chessmanWithCoordinate);
             return chessmanWithCoordinate;
         }
         chessmanWithCoordinate = corrdinateMap.get(corrdinate);
-        if (chessmanWithCoordinate == null){
-            chessmanWithCoordinate = new ChessmanWithCoordinate(chessman,corrdinate);
-            corrdinateMap.put(corrdinate,chessmanWithCoordinate);
+        if (chessmanWithCoordinate == null) {
+            chessmanWithCoordinate = new ChessmanWithCoordinate(chessman, corrdinate);
+            corrdinateMap.put(corrdinate, chessmanWithCoordinate);
         }
 
         return chessmanWithCoordinate;
     }
-
-
-
 
 
     private ChessmanWithCoordinate(Chessman chessman, Corrdinate coordinate) {
@@ -66,28 +64,33 @@ public class ChessmanWithCoordinate implements Comparable<ChessmanWithCoordinate
         this.coordinate = coordinate;
     }
 
-    public byte getXcoordinate(){
+    public byte getXcoordinate() {
         return coordinate.getX_coordinate();
     }
-    public byte getYcoordinate(){
+
+    public byte getYcoordinate() {
         return coordinate.getY_coordinate();
     }
-    public byte getWidth(){
+
+    public byte getWidth() {
         return this.chessman.getType().getWidth();
     }
-    public byte getHeight(){
+
+    public byte getHeight() {
         return this.chessman.getType().getHeight();
     }
-    public char getId(){
+
+    public char getId() {
         return this.chessman.getId();
     }
-    public Chessman getChessman(){
+
+    public Chessman getChessman() {
         return this.chessman;
     }
 
     //将棋子移动，产生新坐标的引用
-    public ChessmanWithCoordinate movedStep(Step step){
-        return getInstance(chessman,coordinate.moveStep(step));
+    public ChessmanWithCoordinate movedStep(Step step) {
+        return getInstance(chessman, coordinate.moveStep(step));
     }
 
     @Override
@@ -99,9 +102,8 @@ public class ChessmanWithCoordinate implements Comparable<ChessmanWithCoordinate
     }
 
 
-
     @Override
     public int compareTo(ChessmanWithCoordinate o) {
-        return Integer.compare(this.hashCode(),o.hashCode());
+        return Integer.compare(this.hashCode(), o.hashCode());
     }
 }
