@@ -32,6 +32,21 @@ public class ChessmanWithCoordinate implements Comparable<ChessmanWithCoordinate
         return (i << 24 | (coordinate.hashCode() & 0xFFFF) << 8 | (chessman.getId() & 0xFF));
     }
 
+
+    private static final ChessmanWithCoordinate [][][] ALL_CHESSMANWITHCORRDINATES=initAllChessmanWithCorrdinate(Chessman.values().length,Corrdinate.X_MAX_VALUE,Corrdinate.Y_MAX_VALUE);
+
+    private static ChessmanWithCoordinate[][][] initAllChessmanWithCorrdinate(int chssmanSize,int corrdinateXMax,int corrdinateYmax) {
+        ChessmanWithCoordinate[][][] result = new ChessmanWithCoordinate[chssmanSize][corrdinateXMax][corrdinateYmax];
+        for (int i =0;i<chssmanSize;i++){
+            for (int j=0;j<corrdinateXMax;j++){
+                for (int k=0;k<corrdinateYmax;k++){
+                    result[i][j][k]=new ChessmanWithCoordinate(Chessman.values()[i],Corrdinate.getInstance(j,k));
+                }
+            }
+        }
+        return result;
+    }
+
     /**
      * 获取缓存的棋子或者生成新的棋子
      *
@@ -40,24 +55,8 @@ public class ChessmanWithCoordinate implements Comparable<ChessmanWithCoordinate
      * @return 返回缓存的棋子
      */
     public static ChessmanWithCoordinate getInstance(Chessman chessman, Corrdinate corrdinate) {
-        Map<Corrdinate, ChessmanWithCoordinate> corrdinateMap = chessmanCashe.get(chessman);
-        ChessmanWithCoordinate chessmanWithCoordinate;
-        if (corrdinateMap == null) {
-            corrdinateMap = new HashMap<>();
-            chessmanCashe.put(chessman, corrdinateMap);
-            chessmanWithCoordinate = new ChessmanWithCoordinate(chessman, corrdinate);
-            corrdinateMap.put(corrdinate, chessmanWithCoordinate);
-            return chessmanWithCoordinate;
-        }
-        chessmanWithCoordinate = corrdinateMap.get(corrdinate);
-        if (chessmanWithCoordinate == null) {
-            chessmanWithCoordinate = new ChessmanWithCoordinate(chessman, corrdinate);
-            corrdinateMap.put(corrdinate, chessmanWithCoordinate);
-        }
-
-        return chessmanWithCoordinate;
+        return ALL_CHESSMANWITHCORRDINATES[chessman.ordinal()][corrdinate.getX_coordinate()][corrdinate.getY_coordinate()];
     }
-
 
     private ChessmanWithCoordinate(Chessman chessman, Corrdinate coordinate) {
         this.chessman = chessman;

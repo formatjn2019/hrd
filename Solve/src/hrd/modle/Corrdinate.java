@@ -4,8 +4,8 @@ public class Corrdinate {
     private int hashCode = Integer.MAX_VALUE;
 
     //通过静态数组生成减少判断时间
-    private static final int X_MAX_VALUE=4;
-    private static final int Y_MAX_VALUE=5;
+    public static final int X_MAX_VALUE=4;
+    public static final int Y_MAX_VALUE=5;
     private static final Corrdinate[][] ALL_CORRDINATES =initAllCorrdinates();
     private static Corrdinate [][] initAllCorrdinates(){
         Corrdinate [][]result = new Corrdinate[Corrdinate.X_MAX_VALUE][Corrdinate.Y_MAX_VALUE];
