@@ -1,29 +1,13 @@
 package hrd.modle;
 
 
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-
 public class ChessmanWithCoordinate implements Comparable<ChessmanWithCoordinate> {
     private final Chessman chessman;
     private final Corrdinate coordinate;
-    private static final Map<Chessman, Map<Corrdinate, ChessmanWithCoordinate>> chessmanCashe = new EnumMap<>(Chessman.class);
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ChessmanWithCoordinate that = (ChessmanWithCoordinate) o;
-        return chessman == that.chessman &&
-                Objects.equals(coordinate, that.coordinate);
-    }
 
     @Override
     public int hashCode() {
         int i = switch (chessman.getType()) {
-
             case CAO -> 0;
             case HENG -> 2;
             case SHU -> 1;
@@ -33,14 +17,16 @@ public class ChessmanWithCoordinate implements Comparable<ChessmanWithCoordinate
     }
 
 
-    private static final ChessmanWithCoordinate [][][] ALL_CHESSMANWITHCORRDINATES=initAllChessmanWithCorrdinate(Chessman.values().length,Corrdinate.X_MAX_VALUE,Corrdinate.Y_MAX_VALUE);
+    private static final ChessmanWithCoordinate[][][] ALL_CHESSMANWITHCORRDINATES = initAllChessmanWithCorrdinate();
 
-    private static ChessmanWithCoordinate[][][] initAllChessmanWithCorrdinate(int chssmanSize,int corrdinateXMax,int corrdinateYmax) {
-        ChessmanWithCoordinate[][][] result = new ChessmanWithCoordinate[chssmanSize][corrdinateXMax][corrdinateYmax];
-        for (int i =0;i<chssmanSize;i++){
-            for (int j=0;j<corrdinateXMax;j++){
-                for (int k=0;k<corrdinateYmax;k++){
-                    result[i][j][k]=new ChessmanWithCoordinate(Chessman.values()[i],Corrdinate.getInstance(j,k));
+    private static ChessmanWithCoordinate[][][] initAllChessmanWithCorrdinate() {
+        ChessmanWithCoordinate[][][] result = new ChessmanWithCoordinate[Corrdinate.X_MAX_VALUE][][];
+        for (int i = 0; i < Corrdinate.X_MAX_VALUE; i++) {
+            result[i] = new ChessmanWithCoordinate[Corrdinate.Y_MAX_VALUE][];
+            for (int j = 0; j < Corrdinate.Y_MAX_VALUE; j++) {
+                result[i][j] = new ChessmanWithCoordinate[Chessman.values().length];
+                for (int k = 0; k < Chessman.values().length; k++) {
+                    result[i][j][k] = new ChessmanWithCoordinate(Chessman.values()[k], Corrdinate.getInstance(i, j));
                 }
             }
         }
@@ -55,7 +41,7 @@ public class ChessmanWithCoordinate implements Comparable<ChessmanWithCoordinate
      * @return 返回缓存的棋子
      */
     public static ChessmanWithCoordinate getInstance(Chessman chessman, Corrdinate corrdinate) {
-        return ALL_CHESSMANWITHCORRDINATES[chessman.ordinal()][corrdinate.getX_coordinate()][corrdinate.getY_coordinate()];
+        return ALL_CHESSMANWITHCORRDINATES[corrdinate.getX_coordinate()][corrdinate.getY_coordinate()][chessman.ordinal()];
     }
 
     private ChessmanWithCoordinate(Chessman chessman, Corrdinate coordinate) {

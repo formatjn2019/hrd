@@ -32,6 +32,37 @@ public class ChessmanStep {
         return spaceChanged;
     }
 
+
+    private static final ChessmanStep[][][] ALL_CHESSMANSTEPS = initAllChessmanSteps();
+
+    private static ChessmanStep[][][] initAllChessmanSteps2() {
+        ChessmanStep[][][] result = new ChessmanStep[Chessman.values().length][Step.values().length][SpaceChanged.values().length];
+        for (int i = 0; i < Chessman.values().length; i++) {
+            for (int j = 0; j < Step.values().length; j++) {
+                for (int k = 0; k < SpaceChanged.values().length; k++) {
+                    result[i][j][k] = new ChessmanStep(Chessman.values()[i], Step.values()[j], SpaceChanged.values()[k]);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private static ChessmanStep[][][] initAllChessmanSteps() {
+        ChessmanStep[][][] result = new ChessmanStep[SpaceChanged.values().length][][];
+        for (int i = 0; i < SpaceChanged.values().length; i++) {
+            result[i] = new ChessmanStep[Chessman.values().length][];
+            for (int j = 0; j < Chessman.values().length; j++) {
+                result[i][j] = new ChessmanStep[Step.values().length];
+                for (int k = 0; k < Step.values().length; k++) {
+                    result[i][j][k] = new ChessmanStep(Chessman.values()[j], Step.values()[k], SpaceChanged.values()[i]);
+                }
+            }
+        }
+
+        return result;
+    }
+
     /**
      * 获取实例对象
      *
@@ -41,22 +72,7 @@ public class ChessmanStep {
      * @return 已经缓存的棋子
      */
     public static ChessmanStep getInstance(Chessman chessman, Step step, SpaceChanged spaceChanged) {
-        Map<Step, Map<SpaceChanged, ChessmanStep>> stepMap = stepCache.get(chessman);
-        if (stepMap == null) {
-            stepMap = new EnumMap<>(Step.class);
-            stepCache.put(chessman, stepMap);
-        }
-        Map<SpaceChanged, ChessmanStep> spaceMap = stepMap.get(step);
-        if (spaceMap == null) {
-            spaceMap = new EnumMap<>(SpaceChanged.class);
-            stepMap.put(step, spaceMap);
-        }
-        ChessmanStep chessmanStep = spaceMap.get(spaceChanged);
-        if (chessmanStep == null) {
-            chessmanStep = new ChessmanStep(chessman, step, spaceChanged);
-            spaceMap.put(spaceChanged, chessmanStep);
-        }
-        return chessmanStep;
+        return ALL_CHESSMANSTEPS[spaceChanged.ordinal()][chessman.ordinal()][step.ordinal()];
     }
 
     @Override

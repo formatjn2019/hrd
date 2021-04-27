@@ -4,14 +4,16 @@ public class Corrdinate {
     private int hashCode = Integer.MAX_VALUE;
 
     //通过静态数组生成减少判断时间
-    public static final int X_MAX_VALUE=4;
-    public static final int Y_MAX_VALUE=5;
-    private static final Corrdinate[][] ALL_CORRDINATES =initAllCorrdinates();
-    private static Corrdinate [][] initAllCorrdinates(){
-        Corrdinate [][]result = new Corrdinate[Corrdinate.X_MAX_VALUE][Corrdinate.Y_MAX_VALUE];
-        for (int i = 0; i< X_MAX_VALUE; i++){
-            for (int j = 0; j< Y_MAX_VALUE; j++){
-                result[i][j]=new Corrdinate(i,j);
+    public static final int X_MAX_VALUE = 4;
+    public static final int Y_MAX_VALUE = 5;
+    private static final Corrdinate[][] ALL_CORRDINATES = initAllCorrdinates();
+
+    private static Corrdinate[][] initAllCorrdinates() {
+        Corrdinate[][] result = new Corrdinate[Corrdinate.X_MAX_VALUE][];
+        for (int i = 0; i < X_MAX_VALUE; i++) {
+            result[i] = new Corrdinate[Corrdinate.Y_MAX_VALUE];
+            for (int j = 0; j < Y_MAX_VALUE; j++) {
+                result[i][j] = new Corrdinate(i, j);
             }
         }
         return result;
@@ -27,7 +29,6 @@ public class Corrdinate {
     public static Corrdinate getInstance(int x, int y) {
         return ALL_CORRDINATES[x][y];
     }
-
 
 
     private final byte x_coordinate;
@@ -47,14 +48,14 @@ public class Corrdinate {
      */
     public Corrdinate moveStep(Step step) {
         return switch (step.getDir()) {
-            case UP -> getInstance(this.x_coordinate, (byte) (this.y_coordinate - step.getLen()));
-            case DOWN -> getInstance(this.x_coordinate, (byte) (this.y_coordinate + step.getLen()));
-            case LEFT -> getInstance((byte) (this.x_coordinate - step.getLen()), this.y_coordinate);
-            case RIGHT -> getInstance((byte) (this.x_coordinate + step.getLen()), this.y_coordinate);
-            case UPLEFT -> getInstance((byte) (this.x_coordinate - step.getLen()), (byte) (this.y_coordinate - step.getLen()));
-            case UPRIGHT -> getInstance((byte) (this.x_coordinate + step.getLen()), (byte) (this.y_coordinate - step.getLen()));
-            case DOWNLEFT -> getInstance((byte) (this.x_coordinate - step.getLen()), (byte) (this.y_coordinate + step.getLen()));
-            case DOWNRIGHT -> getInstance((byte) (this.x_coordinate + step.getLen()), (byte) (this.y_coordinate + step.getLen()));
+            case UP -> getInstance(this.x_coordinate, (this.y_coordinate - step.getLen()));
+            case DOWN -> getInstance(this.x_coordinate, (this.y_coordinate + step.getLen()));
+            case LEFT -> getInstance((this.x_coordinate - step.getLen()), this.y_coordinate);
+            case RIGHT -> getInstance((this.x_coordinate + step.getLen()), this.y_coordinate);
+            case UPLEFT -> getInstance((this.x_coordinate - step.getLen()), (this.y_coordinate - step.getLen()));
+            case UPRIGHT -> getInstance((this.x_coordinate + step.getLen()), (this.y_coordinate - step.getLen()));
+            case DOWNLEFT -> getInstance((this.x_coordinate - step.getLen()), (this.y_coordinate + step.getLen()));
+            case DOWNRIGHT -> getInstance((this.x_coordinate + step.getLen()), (this.y_coordinate + step.getLen()));
         };
     }
 
@@ -68,14 +69,14 @@ public class Corrdinate {
      */
     public Corrdinate moveStep(Step step, Chessman chessman) {
         return switch (step.getDir()) {
-            case UP -> getInstance(this.x_coordinate, (byte) (this.y_coordinate - step.getLen() - (chessman.getType().getHeight() - 1)));
-            case DOWN -> getInstance(this.x_coordinate, (byte) (this.y_coordinate + step.getLen() + (chessman.getType().getHeight() - 1)));
-            case LEFT -> getInstance((byte) (this.x_coordinate - step.getLen() - (chessman.getType().getWidth() - 1)), this.y_coordinate);
-            case RIGHT -> getInstance((byte) (this.x_coordinate + step.getLen() + (chessman.getType().getWidth() - 1)), this.y_coordinate);
-            case UPLEFT -> getInstance((byte) (this.x_coordinate - step.getLen()), (byte) (this.y_coordinate - step.getLen()));
-            case UPRIGHT -> getInstance((byte) (this.x_coordinate + step.getLen()), (byte) (this.y_coordinate - step.getLen()));
-            case DOWNLEFT -> getInstance((byte) (this.x_coordinate - step.getLen()), (byte) (this.y_coordinate + step.getLen()));
-            case DOWNRIGHT -> getInstance((byte) (this.x_coordinate + step.getLen()), (byte) (this.y_coordinate + step.getLen()));
+            case UP -> getInstance(this.x_coordinate, (this.y_coordinate - step.getLen() - (chessman.getType().getHeight() - 1)));
+            case DOWN -> getInstance(this.x_coordinate, (this.y_coordinate + step.getLen() + (chessman.getType().getHeight() - 1)));
+            case LEFT -> getInstance((this.x_coordinate - step.getLen() - (chessman.getType().getWidth() - 1)), this.y_coordinate);
+            case RIGHT -> getInstance((this.x_coordinate + step.getLen() + (chessman.getType().getWidth() - 1)), this.y_coordinate);
+            case UPLEFT -> getInstance((this.x_coordinate - step.getLen()), (this.y_coordinate - step.getLen()));
+            case UPRIGHT -> getInstance((this.x_coordinate + step.getLen()), (this.y_coordinate - step.getLen()));
+            case DOWNLEFT -> getInstance((this.x_coordinate - step.getLen()), (this.y_coordinate + step.getLen()));
+            case DOWNRIGHT -> getInstance((this.x_coordinate + step.getLen()), (this.y_coordinate + step.getLen()));
             default -> throw new IllegalStateException("Unexpected value: " + step.getDir());
         };
     }
