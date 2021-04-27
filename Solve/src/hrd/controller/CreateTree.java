@@ -11,7 +11,7 @@ import java.util.*;
 public class CreateTree {
     private final Set<Chessboard> chessboardSet;
     private final Chessboard root;
-    private final StringBuffer message=new StringBuffer();
+    private final StringBuilder message=new StringBuilder();
     private final Stack<Chessboard> stack = new Stack<>();
     private int totalStep=0;
 

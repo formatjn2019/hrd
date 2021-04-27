@@ -97,36 +97,34 @@ public class Chessboard {
      * 获取棋局状态
      */
     public long getState() {
-        if (this.state == 0) {
-            long temp = 0;
-            byte x, y;
-            for (ChessmanWithCoordinate chessman : chessmans.values()) {
-                x = chessman.getXcoordinate();
-                y = chessman.getYcoordinate();
-                temp = temp << 5 | x << 3 | y;
-            }
-            temp = temp << 1 | (getGuanYu().getChessman().getType() == ChessmanType.HENG ? 1 : 0);
-            temp = temp << 1 | (getZhangFei().getChessman().getType() == ChessmanType.HENG ? 1 : 0);
-            temp = temp << 1 | (getZhaoYun().getChessman().getType() == ChessmanType.HENG ? 1 : 0);
-            temp = temp << 1 | (getMaChao().getChessman().getType() == ChessmanType.HENG ? 1 : 0);
-            temp = temp << 1 | (getHuangZhong().getChessman().getType() == ChessmanType.HENG ? 1 : 0);
-            this.state = temp;
+        if (this.state != 0) {
+            return state;
         }
-        return state;
+        long temp = 0;
+        for (ChessmanWithCoordinate chessman : chessmans.values()) {
+            temp = temp << 5 | chessman.getXcoordinate() << 3 | chessman.getYcoordinate();
+        }
+        temp = temp << 1 | (getGuanYu().getChessman().getType() == ChessmanType.HENG ? 1 : 0);
+        temp = temp << 1 | (getZhangFei().getChessman().getType() == ChessmanType.HENG ? 1 : 0);
+        temp = temp << 1 | (getZhaoYun().getChessman().getType() == ChessmanType.HENG ? 1 : 0);
+        temp = temp << 1 | (getMaChao().getChessman().getType() == ChessmanType.HENG ? 1 : 0);
+        temp = temp << 1 | (getHuangZhong().getChessman().getType() == ChessmanType.HENG ? 1 : 0);
+        return this.state = temp;
+
     }
 
     /**
      * 计算映像
      */
     public long calculateMirror(Map<Chessman, ChessmanWithCoordinate> chessmanMap) {
-        long temp = 0;
+        long result = 0;
         Collection<ChessmanWithCoordinate> values = chessmanMap.values();
         ArrayList<ChessmanWithCoordinate> list = new ArrayList<>(values);
         Collections.sort(list);
         for (ChessmanWithCoordinate chessman : list) {
-            temp = temp << 5 | chessman.getXcoordinate() << 3 | chessman.getYcoordinate();
+            result = result << 5 | chessman.getXcoordinate() << 3 | chessman.getYcoordinate();
         }
-        return temp;
+        return result;
     }
 
 
@@ -134,11 +132,11 @@ public class Chessboard {
      * 计算棋局镜像
      */
     public long getMirror() {
-        if (this.mirror == 0) {
-            //计算镜像
-            this.mirror = calculateMirror(this.chessmans);
+        if (this.mirror != 0) {
+            return this.mirror;
         }
-        return this.mirror;
+        //计算镜像
+        return this.mirror = calculateMirror(this.chessmans);
     }
 
 
@@ -148,17 +146,19 @@ public class Chessboard {
      * @return 对称棋局的镜像
      */
     public long getAdjectiveMirror() {
-        if (this.adjectiveMirror == 0) {
-            //计算对称镜像
-            EnumMap<Chessman, ChessmanWithCoordinate> enumMap = new EnumMap<>(Chessman.class);
-            for (ChessmanWithCoordinate chessman : chessmans.values()) {
-                enumMap.put(chessman.getChessman(),
-                        ChessmanWithCoordinate.getInstance(chessman.getChessman(),
-                                Corrdinate.getInstance((byte) (4 - chessman.getWidth() - chessman.getXcoordinate()), chessman.getYcoordinate())));
-            }
-            this.adjectiveMirror = calculateMirror(enumMap);
+        if (this.adjectiveMirror != 0) {
+            return this.adjectiveMirror;
         }
-        return this.adjectiveMirror;
+
+        //计算对称镜像
+        EnumMap<Chessman, ChessmanWithCoordinate> enumMap = new EnumMap<>(Chessman.class);
+        for (ChessmanWithCoordinate chessman : chessmans.values()) {
+            enumMap.put(chessman.getChessman(),
+                    ChessmanWithCoordinate.getInstance(chessman.getChessman(),
+                            Corrdinate.getInstance(4 - chessman.getWidth() - chessman.getXcoordinate(), chessman.getYcoordinate())));
+        }
+
+        return this.adjectiveMirror = calculateMirror(enumMap);
     }
 
     @Override
