@@ -84,28 +84,8 @@ public class TreeNode {
         ChessmanWithCoordinate beforeChangeChessman = enumMap.get(chessmanStep.getChessman());
         ChessmanWithCoordinate afterChangeChessman = beforeChangeChessman.movedStep(chessmanStep.getStep());
         //空格坐标移动
-        switch (chessmanStep.getSpaceChanged()) {
-
-            case SP1 -> {
-                space1 = chessmanStep.getStep().getOppoisteStep().moveStep(parent.space1, chessmanStep.getChessman().getType());
-                space2 = parent.space2;
-            }
-            case SP2 -> {
-                space1 = parent.space1;
-                space2 = chessmanStep.getStep().getOppoisteStep().moveStep(parent.space2, chessmanStep.getChessman().getType());
-            }
-            //移动宽为2的情况
-            case SP12 -> {
-                space1 = chessmanStep.getStep().getOppoisteStep().moveStep(parent.space1, chessmanStep.getChessman().getType());
-                space2 = chessmanStep.getStep().getOppoisteStep().moveStep(parent.space2, chessmanStep.getChessman().getType());
-            }
-
-            //忽略厚度，用于移动两步的情况
-            default -> {
-                space1 = chessmanStep.getStep().getOppoisteStep().moveStep(parent.space1);
-                space2 = chessmanStep.getStep().getOppoisteStep().moveStep(parent.space2);
-            }
-        }
+        space1 = chessmanStep.getSpaceChanged().moveSpace1(chessmanStep.getStep().getOppoisteStep(),parent.space1,chessmanStep.getChessman().getType());
+        space2 = chessmanStep.getSpaceChanged().moveSpace2(chessmanStep.getStep().getOppoisteStep(),parent.space2,chessmanStep.getChessman().getType());
         enumMap.put(chessmanStep.getChessman(), afterChangeChessman);
         this.chessboard = new Chessboard(enumMap);
 //      测试使用
@@ -221,29 +201,9 @@ public class TreeNode {
      * @return 搜索到的坐标，若越界则返回'0'
      */
     private char searchChessmanId(Corrdinate corrdinate, Step step) {
-        int x = corrdinate.getX_coordinate(), y = corrdinate.getY_coordinate();
-        switch (step.getDir()) {
-            case UP -> y -= step.getLen();
-            case DOWN -> y += step.getLen();
-            case LEFT -> x -= step.getLen();
-            case RIGHT -> x += step.getLen();
-            case UPLEFT -> {
-                x -= 1;
-                y -= 1;
-            }
-            case UPRIGHT -> {
-                x += 1;
-                y -= 1;
-            }
-            case DOWNLEFT -> {
-                x -= 1;
-                y += 1;
-            }
-            case DOWNRIGHT -> {
-                x += 1;
-                y += 1;
-            }
-        }
+        int x = step.moveX(corrdinate.getX_coordinate()),
+                y = step.moveY(corrdinate.getY_coordinate());
+
         if (x < 0 || x > 3 || y < 0 || y > 4) {
             return '0';
         }

@@ -7,7 +7,7 @@ public class ChessmanWithCoordinate implements Comparable<ChessmanWithCoordinate
 
     @Override
     public int hashCode() {
-        return (chessman.getType().ordinal() << 24 | (coordinate.hashCode() & 0xFFFF) << 8 | (chessman.getId() & 0xFF));
+        return (chessman.getType().ordinal() << 24 | (coordinate.hashCode() & 0xFFFF) << 8 | (chessman.ordinal() & 0xFF));
     }
 
 

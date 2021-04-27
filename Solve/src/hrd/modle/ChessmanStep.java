@@ -17,7 +17,43 @@ public class ChessmanStep {
     }
 
     public enum SpaceChanged {
-        SP1, SP2, SP12, SP21
+        //只移动第一个空格
+        SP1() {
+            @Override
+            public Corrdinate moveSpace2(Step step, Corrdinate corrdinate, Chessman.ChessmanType chessmanType) {
+                return corrdinate;
+            }
+        },
+        //只移动第二个空格
+        SP2 {
+            @Override
+            public Corrdinate moveSpace1(Step step, Corrdinate corrdinate, Chessman.ChessmanType chessmanType) {
+                return corrdinate;
+            }
+        },
+        //移动两个空格（宽为2）
+        SP12 {
+
+        },
+        //忽略厚度，用于移动两步的情况
+        SP21 {
+            @Override
+            public Corrdinate moveSpace1(Step step, Corrdinate corrdinate, Chessman.ChessmanType chessmanType) {
+                return step.moveStep(corrdinate);
+            }
+            @Override
+            public Corrdinate moveSpace2(Step step, Corrdinate corrdinate, Chessman.ChessmanType chessmanType) {
+                return step.moveStep(corrdinate);
+            }
+        };
+
+        public Corrdinate moveSpace1(Step step, Corrdinate corrdinate, Chessman.ChessmanType chessmanType) {
+            return step.moveStep(corrdinate, chessmanType);
+        }
+
+        public Corrdinate moveSpace2(Step step, Corrdinate corrdinate, Chessman.ChessmanType chessmanType) {
+            return step.moveStep(corrdinate, chessmanType);
+        }
     }
 
     public Chessman getChessman() {
