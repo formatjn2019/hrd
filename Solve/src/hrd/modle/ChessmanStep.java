@@ -35,19 +35,6 @@ public class ChessmanStep {
 
     private static final ChessmanStep[][][] ALL_CHESSMANSTEPS = initAllChessmanSteps();
 
-    private static ChessmanStep[][][] initAllChessmanSteps2() {
-        ChessmanStep[][][] result = new ChessmanStep[Chessman.values().length][Step.values().length][SpaceChanged.values().length];
-        for (int i = 0; i < Chessman.values().length; i++) {
-            for (int j = 0; j < Step.values().length; j++) {
-                for (int k = 0; k < SpaceChanged.values().length; k++) {
-                    result[i][j][k] = new ChessmanStep(Chessman.values()[i], Step.values()[j], SpaceChanged.values()[k]);
-                }
-            }
-        }
-
-        return result;
-    }
-
     private static ChessmanStep[][][] initAllChessmanSteps() {
         ChessmanStep[][][] result = new ChessmanStep[SpaceChanged.values().length][][];
         for (int i = 0; i < SpaceChanged.values().length; i++) {

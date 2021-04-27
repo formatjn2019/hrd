@@ -38,7 +38,8 @@ public enum Chessman {
         CAO(2, 2),
         HENG(2, 1),
         SHU(1, 2),
-        BING(1, 1);
+        BING(1, 1),
+        KONG(0,0);
         private final byte width;
         private final byte height;
 

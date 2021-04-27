@@ -7,13 +7,7 @@ public class ChessmanWithCoordinate implements Comparable<ChessmanWithCoordinate
 
     @Override
     public int hashCode() {
-        int i = switch (chessman.getType()) {
-            case CAO -> 0;
-            case HENG -> 2;
-            case SHU -> 1;
-            case BING -> 3;
-        };
-        return (i << 24 | (coordinate.hashCode() & 0xFFFF) << 8 | (chessman.getId() & 0xFF));
+        return (chessman.getType().ordinal() << 24 | (coordinate.hashCode() & 0xFFFF) << 8 | (chessman.getId() & 0xFF));
     }
 
 
@@ -75,7 +69,7 @@ public class ChessmanWithCoordinate implements Comparable<ChessmanWithCoordinate
 
     //将棋子移动，产生新坐标的引用
     public ChessmanWithCoordinate movedStep(Step step) {
-        return getInstance(chessman, coordinate.moveStep(step));
+        return getInstance(chessman, step.moveStep(coordinate));
     }
 
     @Override

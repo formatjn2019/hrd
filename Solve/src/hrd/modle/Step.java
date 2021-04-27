@@ -3,8 +3,8 @@ package hrd.modle;
 import static hrd.modle.Step.Direction.*;
 
 public enum Step {
-    UP1(UP, 1),
     UP2(UP, 2),
+    UP1(UP, 1),
     DOWN1(DOWN, 1),
     DOWN2(DOWN, 2),
     LEFT1(LEFT, 1),
@@ -17,7 +17,56 @@ public enum Step {
     DOWNRIGHT1(DOWNRIGHT, 1);
 
     enum Direction {
-        UP, DOWN, LEFT, RIGHT, UPLEFT, UPRIGHT, DOWNLEFT, DOWNRIGHT
+        UP() {
+            @Override
+            Corrdinate moveStep(Corrdinate origin, int lenth, Chessman.ChessmanType chessmanType) {
+                return Corrdinate.getInstance(origin.getX_coordinate(), origin.getY_coordinate() - lenth - (chessmanType.getHeight() - 1));
+            }
+        },
+        DOWN {
+            @Override
+            Corrdinate moveStep(Corrdinate origin, int lenth, Chessman.ChessmanType chessmanType) {
+                return Corrdinate.getInstance(origin.getX_coordinate(), origin.getY_coordinate() + lenth + (chessmanType.getHeight() - 1));
+            }
+        },
+        LEFT {
+            @Override
+            Corrdinate moveStep(Corrdinate origin, int lenth, Chessman.ChessmanType chessmanType) {
+                return Corrdinate.getInstance(origin.getX_coordinate() - lenth - (chessmanType.getWidth() - 1), origin.getY_coordinate());
+            }
+        },
+        RIGHT {
+            @Override
+            Corrdinate moveStep(Corrdinate origin, int lenth, Chessman.ChessmanType chessmanType) {
+                return Corrdinate.getInstance(origin.getX_coordinate() + lenth + (chessmanType.getWidth() - 1), origin.getY_coordinate());
+            }
+        },
+        UPLEFT {
+            @Override
+            Corrdinate moveStep(Corrdinate origin, int lenth, Chessman.ChessmanType chessmanType) {
+                return Corrdinate.getInstance(origin.getX_coordinate() - lenth, origin.getY_coordinate() - lenth);
+            }
+        },
+        UPRIGHT {
+            @Override
+            Corrdinate moveStep(Corrdinate origin, int lenth, Chessman.ChessmanType chessmanType) {
+                return Corrdinate.getInstance(origin.getX_coordinate() + lenth, origin.getY_coordinate() - lenth);
+            }
+        },
+        DOWNLEFT {
+            @Override
+            Corrdinate moveStep(Corrdinate origin, int lenth, Chessman.ChessmanType chessmanType) {
+                return Corrdinate.getInstance(origin.getX_coordinate() - lenth, origin.getY_coordinate() + lenth);
+            }
+        },
+        DOWNRIGHT {
+            @Override
+            Corrdinate moveStep(Corrdinate origin, int lenth, Chessman.ChessmanType chessmanType) {
+                return Corrdinate.getInstance(origin.getX_coordinate() + lenth, origin.getY_coordinate() + lenth);
+            }
+        };
+
+        abstract Corrdinate moveStep(Corrdinate corrdinate, int lenth, Chessman.ChessmanType chessmanType);
     }
 
 
@@ -27,6 +76,27 @@ public enum Step {
     Step(Direction dir, int len) {
         this.dir = dir;
         this.len = (byte) len;
+    }
+
+    /**
+     * 不计较棋子厚度进行移动
+     *
+     * @param origin 棋子原始坐标
+     * @return 新坐标
+     */
+    public Corrdinate moveStep(Corrdinate origin) {
+        return this.dir.moveStep(origin, this.len, Chessman.ChessmanType.BING);
+    }
+
+    /**
+     * 计算棋子厚度进行移动
+     *
+     * @param origin       棋子原始坐标
+     * @param chessmanType 棋子类型
+     * @return 新坐标
+     */
+    public Corrdinate moveStep(Corrdinate origin, Chessman.ChessmanType chessmanType) {
+        return this.dir.moveStep(origin, this.len, chessmanType);
     }
 
     public Step getOppoisteStep() {

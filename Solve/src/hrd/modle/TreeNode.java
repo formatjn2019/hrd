@@ -87,23 +87,23 @@ public class TreeNode {
         switch (chessmanStep.getSpaceChanged()) {
 
             case SP1 -> {
-                space1 = parent.space1.moveStep(chessmanStep.getStep().getOppoisteStep(), chessmanStep.getChessman());
+                space1 = chessmanStep.getStep().getOppoisteStep().moveStep(parent.space1, chessmanStep.getChessman().getType());
                 space2 = parent.space2;
             }
             case SP2 -> {
                 space1 = parent.space1;
-                space2 = parent.space2.moveStep(chessmanStep.getStep().getOppoisteStep(), chessmanStep.getChessman());
+                space2 = chessmanStep.getStep().getOppoisteStep().moveStep(parent.space2, chessmanStep.getChessman().getType());
             }
             //移动宽为2的情况
             case SP12 -> {
-                space1 = parent.space1.moveStep(chessmanStep.getStep().getOppoisteStep(), chessmanStep.getChessman());
-                space2 = parent.space2.moveStep(chessmanStep.getStep().getOppoisteStep(), chessmanStep.getChessman());
+                space1 = chessmanStep.getStep().getOppoisteStep().moveStep(parent.space1, chessmanStep.getChessman().getType());
+                space2 = chessmanStep.getStep().getOppoisteStep().moveStep(parent.space2, chessmanStep.getChessman().getType());
             }
 
             //忽略厚度，用于移动两步的情况
             default -> {
-                space1 = parent.space1.moveStep(chessmanStep.getStep().getOppoisteStep());
-                space2 = parent.space2.moveStep(chessmanStep.getStep().getOppoisteStep());
+                space1 = chessmanStep.getStep().getOppoisteStep().moveStep(parent.space1);
+                space2 = chessmanStep.getStep().getOppoisteStep().moveStep(parent.space2);
             }
         }
         enumMap.put(chessmanStep.getChessman(), afterChangeChessman);
