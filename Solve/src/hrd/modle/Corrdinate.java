@@ -6,6 +6,14 @@ public class Corrdinate {
     public static final int X_MAX_VALUE = 4;
     public static final int Y_MAX_VALUE = 5;
     private static final Corrdinate[][] ALL_CORRDINATES = initAllCorrdinates();
+    private final byte x_coordinate;
+    private final byte y_coordinate;
+
+
+    private Corrdinate(int x_coordinate, int y_coordinate) {
+        this.x_coordinate = (byte) x_coordinate;
+        this.y_coordinate = (byte) y_coordinate;
+    }
 
     private static Corrdinate[][] initAllCorrdinates() {
         Corrdinate[][] result = new Corrdinate[Corrdinate.X_MAX_VALUE][];
@@ -28,16 +36,6 @@ public class Corrdinate {
     public static Corrdinate getInstance(int x, int y) {
         return ALL_CORRDINATES[x][y];
     }
-
-
-    private final byte x_coordinate;
-    private final byte y_coordinate;
-
-    private Corrdinate(int x_coordinate, int y_coordinate) {
-        this.x_coordinate = (byte) x_coordinate;
-        this.y_coordinate = (byte) y_coordinate;
-    }
-
 
     public byte getX_coordinate() {
         return x_coordinate;

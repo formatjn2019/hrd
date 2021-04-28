@@ -7,11 +7,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CreateTreeTest {
     static CreateTree tree1;
+
     @BeforeAll
-    static void init(){
+    static void init() {
 //        tree1 = new CreateTree(18387170901632856L);
         tree1 = new CreateTree(9359138341900176L);
     }
+
     @Test
     void printAllStep() {
 
@@ -24,10 +26,10 @@ class CreateTreeTest {
     }
 
     @Test
-    void assessNoError(){
+    void assessNoError() {
         tree1.calculateResult();
-        assertEquals(tree1.toString(),"CreateTree{message=totalStep:23822\n" +
-                "totalNode:23822\n" +
+        assertEquals(tree1.toString(), "CreateTree{message=totalStep:23922\n" +
+                "totalNode:23922\n" +
                 "计算成功level: 1\tnewNodes: 8\n" +
                 "level: 2\tnewNodes: 11\n" +
                 "level: 3\tnewNodes: 15\n" +
@@ -108,7 +110,7 @@ class CreateTreeTest {
                 "level: 78\tnewNodes: 242\n" +
                 "level: 79\tnewNodes: 201\n" +
                 "level: 80\tnewNodes: 159\n" +
-                "level: 81\tnewNodes: 30\n" +
+                "level: 81\tnewNodes: 130\n" +
                 "}");
     }
 }

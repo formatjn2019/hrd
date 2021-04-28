@@ -5,18 +5,19 @@ import hrd.modle.Chessman;
 import hrd.modle.ChessmanWithCoordinate;
 import hrd.modle.Corrdinate;
 
-import java.util.*;
+import java.util.EnumMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CreateAllChessboard {
 
     /**
-     * 利用缓存高速生成所有棋局
+     * 生成所有棋局
      *
-     * @param type          类型
-     * @param cachedMirrors 缓存的Mirrors
+     * @param type 类型
      * @return 所有棋局Set
      */
-    public static Set<Chessboard> getAlltypeWithChche(int type, Set<Long> cachedMirrors) {
+    public static Set<Chessboard> getAlltypeWithChche(int type) {
         Chessman[] chessmans = new Chessman[10];
         boolean[] types = new boolean[10];
         //解析类型

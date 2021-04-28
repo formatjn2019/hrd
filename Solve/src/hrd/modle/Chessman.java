@@ -34,29 +34,6 @@ public enum Chessman {
         this.type = type;
     }
 
-    public enum ChessmanType {
-        CAO(2, 2),
-        HENG(2, 1),
-        SHU(1, 2),
-        BING(1, 1),
-        KONG(0,0);
-        private final byte width;
-        private final byte height;
-
-        ChessmanType(int width, int height) {
-            this.width = (byte) width;
-            this.height = (byte) height;
-        }
-
-        public byte getWidth() {
-            return width;
-        }
-
-        public byte getHeight() {
-            return height;
-        }
-    }
-
     /**
      * 根据id和类型获取棋子
      *
@@ -80,12 +57,33 @@ public enum Chessman {
         };
     }
 
-
     public char getId() {
         return id;
     }
 
     public ChessmanType getType() {
         return type;
+    }
+
+    public enum ChessmanType {
+        CAO(2, 2),
+        HENG(2, 1),
+        SHU(1, 2),
+        BING(1, 1);
+        private final byte width;
+        private final byte height;
+
+        ChessmanType(int width, int height) {
+            this.width = (byte) width;
+            this.height = (byte) height;
+        }
+
+        public byte getWidth() {
+            return width;
+        }
+
+        public byte getHeight() {
+            return height;
+        }
     }
 }

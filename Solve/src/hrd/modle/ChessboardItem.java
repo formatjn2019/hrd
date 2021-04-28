@@ -38,6 +38,15 @@ public class ChessboardItem implements Comparable<ChessboardItem> {
         this.type = Integer.parseInt(type);
     }
 
+    /**
+     * 生成文本文件头
+     *
+     * @return 文件头的字符串
+     */
+    public static String getHeads() {
+        return "名称" + "," + "状态" + "," + "最优步数" + "," + "类型";
+    }
+
     public Chessboard getChessboard() {
         return chessboard;
     }
@@ -52,15 +61,6 @@ public class ChessboardItem implements Comparable<ChessboardItem> {
 
     public int getType() {
         return type;
-    }
-
-    /**
-     * 生成文本文件头
-     *
-     * @return 文件头的字符串
-     */
-    public static String getHeads() {
-        return "名称" + "," + "状态" + "," + "最优步数" + "," + "类型";
     }
 
     /**

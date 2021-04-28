@@ -16,6 +16,65 @@ public enum Step {
     DOWN2(DOWN, 2),
     LEFT2(LEFT, 2);
 
+    private final Direction dir;
+    private final byte len;
+
+    Step(Direction dir, int len) {
+        this.dir = dir;
+        this.len = (byte) len;
+    }
+
+    public int moveX(int xOrigin) {
+        return this.dir.moveX(xOrigin, this.len);
+    }
+
+    public int moveY(int yOrigin) {
+        return this.dir.moveY(yOrigin, this.len);
+    }
+
+    /**
+     * 不计较棋子厚度进行移动
+     *
+     * @param origin 棋子原始坐标
+     * @return 新坐标
+     */
+    public Corrdinate moveStep(Corrdinate origin) {
+        return this.dir.moveStep(origin, this.len, Chessman.ChessmanType.BING);
+    }
+
+    /**
+     * 计算棋子厚度进行移动
+     *
+     * @param origin       棋子原始坐标
+     * @param chessmanType 棋子类型
+     * @return 新坐标
+     */
+    public Corrdinate moveStep(Corrdinate origin, Chessman.ChessmanType chessmanType) {
+        return this.dir.moveStep(origin, this.len, chessmanType);
+    }
+
+    public Step getOppoisteStep() {
+        return Step.values()[this.ordinal() < 8 ? (this.ordinal() + 4) % 8 : ((this.ordinal() - 6) % 4 + 8)];
+    }
+
+    /**
+     * 获取方向
+     *
+     * @return 枚举的方向
+     */
+    public Direction getDir() {
+        return dir;
+    }
+
+    /**
+     * 获取长度
+     *
+     * @return 返回长度
+     */
+    public byte getLen() {
+        return len;
+    }
+
     enum Direction {
         UP() {
             @Override
@@ -114,64 +173,5 @@ public enum Step {
         public Corrdinate moveStep(Corrdinate origin, int lenth, Chessman.ChessmanType chessmanType) {
             return Corrdinate.getInstance(moveX(origin.getX_coordinate(), lenth + chessmanType.getWidth() - 1), moveY(origin.getY_coordinate(), lenth + chessmanType.getHeight() - 1));
         }
-    }
-
-
-    private final Direction dir;
-    private final byte len;
-
-    Step(Direction dir, int len) {
-        this.dir = dir;
-        this.len = (byte) len;
-    }
-
-    public int moveX(int xOrigin) {
-        return this.dir.moveX(xOrigin, this.len);
-    }
-
-    public int moveY(int yOrigin) {
-        return this.dir.moveY(yOrigin, this.len);
-    }
-    /**
-     * 不计较棋子厚度进行移动
-     *
-     * @param origin 棋子原始坐标
-     * @return 新坐标
-     */
-    public Corrdinate moveStep(Corrdinate origin) {
-        return this.dir.moveStep(origin, this.len, Chessman.ChessmanType.BING);
-    }
-
-    /**
-     * 计算棋子厚度进行移动
-     *
-     * @param origin       棋子原始坐标
-     * @param chessmanType 棋子类型
-     * @return 新坐标
-     */
-    public Corrdinate moveStep(Corrdinate origin, Chessman.ChessmanType chessmanType) {
-        return this.dir.moveStep(origin, this.len, chessmanType);
-    }
-
-    public Step getOppoisteStep() {
-        return Step.values()[this.ordinal() < 8 ? (this.ordinal() + 4) % 8 : ((this.ordinal() - 6) % 4 + 8)];
-    }
-
-    /**
-     * 获取方向
-     *
-     * @return 枚举的方向
-     */
-    public Direction getDir() {
-        return dir;
-    }
-
-    /**
-     * 获取长度
-     *
-     * @return 返回长度
-     */
-    public byte getLen() {
-        return len;
     }
 }

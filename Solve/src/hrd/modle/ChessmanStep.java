@@ -6,6 +6,10 @@ import java.util.Map;
 
 public class ChessmanStep {
     private static final Map<Chessman, Map<Step, Map<SpaceChanged, ChessmanStep>>> stepCache = new EnumMap<>(Chessman.class);
+    /**
+     * 提前生成所有棋子步骤
+     */
+    private static final ChessmanStep[][][] ALL_CHESSMANSTEPS = initAllChessmanSteps();
     private final Chessman chessman;
     private final Step step;
     private final SpaceChanged spaceChanged;
@@ -15,61 +19,6 @@ public class ChessmanStep {
         this.step = step;
         this.spaceChanged = spaceChanged;
     }
-
-    public enum SpaceChanged {
-        //只移动第一个空格
-        SP1() {
-            @Override
-            public Corrdinate moveSpace2(Step step, Corrdinate corrdinate, Chessman.ChessmanType chessmanType) {
-                return corrdinate;
-            }
-        },
-        //只移动第二个空格
-        SP2 {
-            @Override
-            public Corrdinate moveSpace1(Step step, Corrdinate corrdinate, Chessman.ChessmanType chessmanType) {
-                return corrdinate;
-            }
-        },
-        //移动两个空格（宽为2）
-        SP12 {
-
-        },
-        //忽略厚度，用于移动两步的情况
-        SP21 {
-            @Override
-            public Corrdinate moveSpace1(Step step, Corrdinate corrdinate, Chessman.ChessmanType chessmanType) {
-                return step.moveStep(corrdinate);
-            }
-            @Override
-            public Corrdinate moveSpace2(Step step, Corrdinate corrdinate, Chessman.ChessmanType chessmanType) {
-                return step.moveStep(corrdinate);
-            }
-        };
-
-        public Corrdinate moveSpace1(Step step, Corrdinate corrdinate, Chessman.ChessmanType chessmanType) {
-            return step.moveStep(corrdinate, chessmanType);
-        }
-
-        public Corrdinate moveSpace2(Step step, Corrdinate corrdinate, Chessman.ChessmanType chessmanType) {
-            return step.moveStep(corrdinate, chessmanType);
-        }
-    }
-
-    public Chessman getChessman() {
-        return chessman;
-    }
-
-    public Step getStep() {
-        return step;
-    }
-
-    public SpaceChanged getSpaceChanged() {
-        return spaceChanged;
-    }
-
-
-    private static final ChessmanStep[][][] ALL_CHESSMANSTEPS = initAllChessmanSteps();
 
     private static ChessmanStep[][][] initAllChessmanSteps() {
         ChessmanStep[][][] result = new ChessmanStep[SpaceChanged.values().length][][];
@@ -98,6 +47,18 @@ public class ChessmanStep {
         return ALL_CHESSMANSTEPS[spaceChanged.ordinal()][chessman.ordinal()][step.ordinal()];
     }
 
+    public Chessman getChessman() {
+        return chessman;
+    }
+
+    public Step getStep() {
+        return step;
+    }
+
+    public SpaceChanged getSpaceChanged() {
+        return spaceChanged;
+    }
+
     @Override
     public String toString() {
         return "ChessmanStep{" +
@@ -105,5 +66,46 @@ public class ChessmanStep {
                 ", step=" + step +
                 ", spaceChanged=" + spaceChanged +
                 '}';
+    }
+
+    public enum SpaceChanged {
+        //只移动第一个空格
+        SP1() {
+            @Override
+            public Corrdinate moveSpace2(Step step, Corrdinate corrdinate, Chessman.ChessmanType chessmanType) {
+                return corrdinate;
+            }
+        },
+        //只移动第二个空格
+        SP2 {
+            @Override
+            public Corrdinate moveSpace1(Step step, Corrdinate corrdinate, Chessman.ChessmanType chessmanType) {
+                return corrdinate;
+            }
+        },
+        //移动两个空格（宽为2）
+        SP12 {
+
+        },
+        //忽略厚度，用于移动两步的情况
+        SP21 {
+            @Override
+            public Corrdinate moveSpace1(Step step, Corrdinate corrdinate, Chessman.ChessmanType chessmanType) {
+                return step.moveStep(corrdinate);
+            }
+
+            @Override
+            public Corrdinate moveSpace2(Step step, Corrdinate corrdinate, Chessman.ChessmanType chessmanType) {
+                return step.moveStep(corrdinate);
+            }
+        };
+
+        public Corrdinate moveSpace1(Step step, Corrdinate corrdinate, Chessman.ChessmanType chessmanType) {
+            return step.moveStep(corrdinate, chessmanType);
+        }
+
+        public Corrdinate moveSpace2(Step step, Corrdinate corrdinate, Chessman.ChessmanType chessmanType) {
+            return step.moveStep(corrdinate, chessmanType);
+        }
     }
 }

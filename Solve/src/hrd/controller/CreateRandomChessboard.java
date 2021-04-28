@@ -5,7 +5,10 @@ import hrd.modle.Chessman;
 import hrd.modle.ChessmanWithCoordinate;
 import hrd.modle.Corrdinate;
 
-import java.util.*;
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class CreateRandomChessboard {

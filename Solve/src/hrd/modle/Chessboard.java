@@ -5,10 +5,10 @@ import java.util.*;
 import static hrd.modle.Chessman.*;
 
 public class Chessboard {
+    private final Map<Chessman, ChessmanWithCoordinate> chessmans;
     private long state = 0L;
     private long mirror = 0L;
     private long adjectiveMirror = 0L;
-    private final Map<Chessman, ChessmanWithCoordinate> chessmans;
 
 
     /**

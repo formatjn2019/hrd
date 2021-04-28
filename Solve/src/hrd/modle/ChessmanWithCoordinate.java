@@ -2,16 +2,15 @@ package hrd.modle;
 
 
 public class ChessmanWithCoordinate implements Comparable<ChessmanWithCoordinate> {
+    private static final ChessmanWithCoordinate[][][] ALL_CHESSMANWITHCORRDINATES = initAllChessmanWithCorrdinate();
     private final Chessman chessman;
     private final Corrdinate coordinate;
 
-    @Override
-    public int hashCode() {
-        return (chessman.getType().ordinal() << 24 | (coordinate.hashCode() & 0xFFFF) << 8 | (chessman.ordinal() & 0xFF));
+
+    private ChessmanWithCoordinate(Chessman chessman, Corrdinate coordinate) {
+        this.chessman = chessman;
+        this.coordinate = coordinate;
     }
-
-
-    private static final ChessmanWithCoordinate[][][] ALL_CHESSMANWITHCORRDINATES = initAllChessmanWithCorrdinate();
 
     private static ChessmanWithCoordinate[][][] initAllChessmanWithCorrdinate() {
         ChessmanWithCoordinate[][][] result = new ChessmanWithCoordinate[Corrdinate.X_MAX_VALUE][][];
@@ -38,9 +37,9 @@ public class ChessmanWithCoordinate implements Comparable<ChessmanWithCoordinate
         return ALL_CHESSMANWITHCORRDINATES[corrdinate.getX_coordinate()][corrdinate.getY_coordinate()][chessman.ordinal()];
     }
 
-    private ChessmanWithCoordinate(Chessman chessman, Corrdinate coordinate) {
-        this.chessman = chessman;
-        this.coordinate = coordinate;
+    @Override
+    public int hashCode() {
+        return (chessman.getType().ordinal() << 24 | (coordinate.hashCode() & 0xFFFF) << 8 | (chessman.ordinal() & 0xFF));
     }
 
     public byte getXcoordinate() {

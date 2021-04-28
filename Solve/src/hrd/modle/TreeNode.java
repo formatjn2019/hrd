@@ -17,24 +17,6 @@ public class TreeNode {
     private final Corrdinate space2;
 
     /**
-     * 克隆棋盘数组
-     *
-     * @return 返回新的数组
-     */
-    public char[][] getChessboardArr() {
-        return new char[][]{chessboardArr[0].clone(), chessboardArr[1].clone(), chessboardArr[2].clone(), chessboardArr[3].clone(), chessboardArr[4].clone()};
-    }
-
-    /**
-     * 获取父节点
-     *
-     * @return 返回父节点
-     */
-    public TreeNode getParent() {
-        return parent;
-    }
-
-    /**
      * 为根结点进行初始化
      *
      * @param bootChessboard 根结点
@@ -54,18 +36,6 @@ public class TreeNode {
         space1 = searchSpace(arr, 0, 0, false);
         space2 = searchSpace(arr, space1.getY_coordinate(), space1.getX_coordinate(), true);
     }
-
-    private static Corrdinate searchSpace(char[][] arr, int xStart, int ystart, boolean flag) {
-        for (int i = xStart; i < 5; i++, flag = false) {
-            for (int j = flag ? ystart : 0; j < 4; j++, flag = false) {
-                if (arr[i][j] == '\0' && !flag) {
-                    return Corrdinate.getInstance(j, i);
-                }
-            }
-        }
-        throw new ArrayIndexOutOfBoundsException();
-    }
-
 
     /**
      * 根据步骤步骤进行初始化
@@ -98,6 +68,44 @@ public class TreeNode {
         this.chessboardArr = parentChessboardArrClone;
     }
 
+    /**
+     * 搜索空格位置
+     *
+     * @param arr    搜索的数组
+     * @param xStart 开始的横坐标
+     * @param yStart 开始的纵坐标
+     * @param flag   修改标志位
+     * @return 空格坐标
+     */
+    private static Corrdinate searchSpace(char[][] arr, int xStart, int yStart, boolean flag) {
+        for (int i = xStart; i < 5; i++, flag = false) {
+            for (int j = flag ? yStart : 0; j < 4; j++, flag = false) {
+                if (arr[i][j] == '\0' && !flag) {
+                    return Corrdinate.getInstance(j, i);
+                }
+            }
+        }
+        throw new ArrayIndexOutOfBoundsException();
+    }
+
+    /**
+     * 克隆棋盘数组
+     *
+     * @return 返回新的数组
+     */
+    public char[][] getChessboardArr() {
+        return new char[][]{chessboardArr[0].clone(), chessboardArr[1].clone(), chessboardArr[2].clone(), chessboardArr[3].clone(), chessboardArr[4].clone()};
+    }
+
+    /**
+     * 获取父节点
+     *
+     * @return 返回父节点
+     */
+    public TreeNode getParent() {
+        return parent;
+    }
+
     private Chessman getChessmanById(char id) {
         return switch (id) {
             case 'a' -> Chessman.曹操;
@@ -115,7 +123,9 @@ public class TreeNode {
 
     }
 
-    //获取该节点能获得的所有步骤
+    /**
+     * 获取该节点能获得的所有步骤
+     */
     public LinkedList<ChessmanStep> getSteps() {
         LinkedList<ChessmanStep> resultSteps = new LinkedList<>();
         Corrdinate[] spaces = {space1, space2};
@@ -126,7 +136,7 @@ public class TreeNode {
         char[] dirs = new char[4];
         //方向长度
         int[] lenth = new int[2];
-        //更改，根据空格判断
+        //根据空格判断
         for (int correntSprace = 0; correntSprace < 2; correntSprace++) {
             dirs[0] = searchChessmanId(spaces[correntSprace], Step.UP1);
             dirs[1] = searchChessmanId(spaces[correntSprace], Step.RIGHT1);
