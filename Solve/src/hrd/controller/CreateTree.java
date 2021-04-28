@@ -80,9 +80,9 @@ public class CreateTree {
         AtomicBoolean succeedFlag = new AtomicBoolean(false);
         AtomicReference<TreeNode> endNode = new AtomicReference<>();
         List<TreeNode> newNodes = nodes.stream()
-                .parallel()
                 .flatMap((node -> node.getSteps().stream()
                         .map((step) -> new TreeNode(node, step))))
+                .parallel()
                 .filter(newNode -> chessboardSet.add(newNode.getChessboard()))
                 .peek(newNode -> {
                             if (newNode.isEndNode()) {
