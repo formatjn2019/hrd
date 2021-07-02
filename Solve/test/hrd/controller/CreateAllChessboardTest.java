@@ -39,7 +39,7 @@ class CreateAllChessboardTest {
                 chessboardItemMap.put(chessboard.getState(), new ChessboardItem(chessboard, createTree.getStack().size() - 1, "new" + index, type));
                 hashCodeItemMap.put(chessboard.getMirror(), new ChessboardItem(chessboard, createTree.getStack().size() - 1, "new" + index, type));
                 //去掉当前
-                ArrayDeque<Chessboard> stack = createTree.getStack();
+                Stack<Chessboard> stack = createTree.getStack();
                 if (!stack.isEmpty()) {
                     stack.pop();
                 }
