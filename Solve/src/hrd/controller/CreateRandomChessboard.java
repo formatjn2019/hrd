@@ -3,7 +3,7 @@ package hrd.controller;
 import hrd.modle.Chessboard;
 import hrd.modle.Chessman;
 import hrd.modle.ChessmanWithCoordinate;
-import hrd.modle.Corrdinate;
+import hrd.modle.Coordinate;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -33,7 +33,7 @@ public class CreateRandomChessboard {
             type >>= 1;
         }
         for (int i = 0; i < 10; i++) {
-            Chessman chessman = Chessman.getInstanceByID((char) ('a' + i), types[i] ? Chessman.ChessmanType.HENG : Chessman.ChessmanType.SHU);
+            Chessman chessman = Chessman.getInstanceByID((char) ('a' + i), types[i] ? Chessman.ChessmanType.HORIZONTAL : Chessman.ChessmanType.VERTICAL);
             chessmans[i] = chessman;
             int x = 0, y = 0;
             boolean flag = true;
@@ -57,7 +57,7 @@ public class CreateRandomChessboard {
                     chars[ty][tx] = chessman.getId();
                 }
             }
-            chessmanMap.put(chessmans[i], ChessmanWithCoordinate.getInstance(chessman, Corrdinate.getInstance((byte) x, (byte) y)));
+            chessmanMap.put(chessmans[i], ChessmanWithCoordinate.getInstance(chessman, Coordinate.getInstance((byte) x, (byte) y)));
         }
         return Optional.of(new Chessboard(chessmanMap));
     }
@@ -118,7 +118,7 @@ public class CreateRandomChessboard {
         int falueCount = 0;
         while (true) {
             for (int i = 0; i < 10; i++) {
-                Chessman chessman = Chessman.getInstanceByID((char) ('a' + i), types[i] ? Chessman.ChessmanType.HENG : Chessman.ChessmanType.SHU);
+                Chessman chessman = Chessman.getInstanceByID((char) ('a' + i), types[i] ? Chessman.ChessmanType.HORIZONTAL : Chessman.ChessmanType.VERTICAL);
                 chessmans[i] = chessman;
                 int x = 0, y = 0;
                 boolean flag = true;
@@ -146,7 +146,7 @@ public class CreateRandomChessboard {
                         chars[ty][tx] = chessman.getId();
                     }
                 }
-                chessmanMap.put(chessmans[i], ChessmanWithCoordinate.getInstance(chessman, Corrdinate.getInstance((byte) x, (byte) y)));
+                chessmanMap.put(chessmans[i], ChessmanWithCoordinate.getInstance(chessman, Coordinate.getInstance((byte) x, (byte) y)));
             }
             chessboard = new Chessboard(chessmanMap);
             if (cachedMirrors.add(chessboard.getMirror())) {

@@ -13,8 +13,8 @@ public class TreeNode {
     private final TreeNode parent;
     private final Chessboard chessboard;
     private final char[][] chessboardArr;
-    private final Corrdinate space1;
-    private final Corrdinate space2;
+    private final Coordinate space1;
+    private final Coordinate space2;
 
     /**
      * 为根结点进行初始化
@@ -26,7 +26,7 @@ public class TreeNode {
         this.parent = null;
         char[][] arr = new char[5][4];
         chessboardArr = arr;
-        for (ChessmanWithCoordinate chessman : this.chessboard.getChessmans().values()) {
+        for (ChessmanWithCoordinate chessman : this.chessboard.getChessmanMap().values()) {
             for (int i = chessman.getYcoordinate(); i < chessman.getYcoordinate() + chessman.getHeight(); i++) {
                 for (int j = chessman.getXcoordinate(); j < chessman.getXcoordinate() + chessman.getWidth(); j++) {
                     arr[i][j] = chessman.getId();
@@ -47,7 +47,7 @@ public class TreeNode {
         this.parent = parent;
         char[][] parentChessboardArrClone = parent.getChessboardArr();
         //子类棋盘对象构建
-        EnumMap<Chessman, ChessmanWithCoordinate> enumMap = new EnumMap<>(parent.chessboard.getChessmans());
+        EnumMap<Chessman, ChessmanWithCoordinate> enumMap = new EnumMap<>(parent.chessboard.getChessmanMap());
         ChessmanWithCoordinate beforeChangeChessman = enumMap.get(chessmanStep.getChessman());
         ChessmanWithCoordinate afterChangeChessman = beforeChangeChessman.movedStep(chessmanStep.getStep());
         //空格坐标移动
@@ -77,11 +77,11 @@ public class TreeNode {
      * @param flag   修改标志位
      * @return 空格坐标
      */
-    private static Corrdinate searchSpace(char[][] arr, int xStart, int yStart, boolean flag) {
+    private static Coordinate searchSpace(char[][] arr, int xStart, int yStart, boolean flag) {
         for (int i = xStart; i < 5; i++, flag = false) {
             for (int j = flag ? yStart : 0; j < 4; j++, flag = false) {
                 if (arr[i][j] == '\0' && !flag) {
-                    return Corrdinate.getInstance(j, i);
+                    return Coordinate.getInstance(j, i);
                 }
             }
         }
@@ -108,16 +108,16 @@ public class TreeNode {
 
     private Chessman getChessmanById(char id) {
         return switch (id) {
-            case 'a' -> Chessman.曹操;
-            case 'b' -> chessboard.getChessmans().get(Chessman.关羽1) == null ? Chessman.关羽2 : Chessman.关羽1;
-            case 'c' -> chessboard.getChessmans().get(Chessman.张飞1) == null ? Chessman.张飞2 : Chessman.张飞1;
-            case 'd' -> chessboard.getChessmans().get(Chessman.赵云1) == null ? Chessman.赵云2 : Chessman.赵云1;
-            case 'e' -> chessboard.getChessmans().get(Chessman.马超1) == null ? Chessman.马超2 : Chessman.马超1;
-            case 'f' -> chessboard.getChessmans().get(Chessman.黄忠1) == null ? Chessman.黄忠2 : Chessman.黄忠1;
-            case 'g' -> Chessman.兵1;
-            case 'h' -> Chessman.兵2;
-            case 'i' -> Chessman.兵3;
-            case 'j' -> Chessman.兵4;
+            case 'a' -> Chessman.CAO_CAO;
+            case 'b' -> chessboard.getChessmanMap().get(Chessman.GUAN_YU_HORIZONTAL) == null ? Chessman.GUAN_YU_VERTICAL : Chessman.GUAN_YU_HORIZONTAL;
+            case 'c' -> chessboard.getChessmanMap().get(Chessman.ZHANG_FEI_HORIZONTAL) == null ? Chessman.ZHANG_FEI_VERTICAL : Chessman.ZHANG_FEI_HORIZONTAL;
+            case 'd' -> chessboard.getChessmanMap().get(Chessman.ZHAO_YUN_HORIZONTAL) == null ? Chessman.ZHAO_YUN_VERTICAL : Chessman.ZHAO_YUN_HORIZONTAL;
+            case 'e' -> chessboard.getChessmanMap().get(Chessman.MA_CHAO_HORIZONTAL) == null ? Chessman.MA_CHAO_VERTICAL : Chessman.MA_CHAO_HORIZONTAL;
+            case 'f' -> chessboard.getChessmanMap().get(Chessman.HUANG_ZHONG_HORIZONTAL) == null ? Chessman.HUANG_ZHONG_VERTICAL : Chessman.HUANG_ZHONG_HORIZONTAL;
+            case 'g' -> Chessman.BING1;
+            case 'h' -> Chessman.BING2;
+            case 'i' -> Chessman.BING3;
+            case 'j' -> Chessman.BING4;
             default -> null;
         };
 
@@ -128,7 +128,7 @@ public class TreeNode {
      */
     public LinkedList<ChessmanStep> getSteps() {
         LinkedList<ChessmanStep> resultSteps = new LinkedList<>();
-        Corrdinate[] spaces = {space1, space2};
+        Coordinate[] spaces = {space1, space2};
         ChessmanStep.SpaceChanged[] spaceChangeds = {SP1, SP2};
         //当前字符
         char corrent;
@@ -195,13 +195,13 @@ public class TreeNode {
     /**
      * 搜索以坐标移动目标位置的棋子类型
      *
-     * @param corrdinate 搜索坐标
+     * @param coordinate 搜索坐标
      * @param step       移动的步骤
      * @return 搜索到的坐标，若越界则返回'0'
      */
-    private char searchChessmanId(Corrdinate corrdinate, Step step) {
-        int x = step.moveX(corrdinate.getX_coordinate()),
-                y = step.moveY(corrdinate.getY_coordinate());
+    private char searchChessmanId(Coordinate coordinate, Step step) {
+        int x = step.moveX(coordinate.getX_coordinate()),
+                y = step.moveY(coordinate.getY_coordinate());
 
         if (x < 0 || x > 3 || y < 0 || y > 4) {
             return '0';
@@ -219,7 +219,7 @@ public class TreeNode {
      * @return true代表终止节点
      */
     public boolean isEndNode() {
-        ChessmanWithCoordinate chessman = chessboard.getChessmans().get(Chessman.曹操);
+        ChessmanWithCoordinate chessman = chessboard.getChessmanMap().get(Chessman.CAO_CAO);
         return chessman.getXcoordinate() == 1 && chessman.getYcoordinate() == 3;
     }
 

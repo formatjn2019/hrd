@@ -38,8 +38,8 @@ public enum Step {
      * @param origin 棋子原始坐标
      * @return 新坐标
      */
-    public Corrdinate moveStep(Corrdinate origin) {
-        return this.dir.moveStep(origin, this.len, Chessman.ChessmanType.BING);
+    public Coordinate moveStep(Coordinate origin) {
+        return this.dir.moveStep(origin, this.len, Chessman.ChessmanType.SMALL);
     }
 
     /**
@@ -49,7 +49,7 @@ public enum Step {
      * @param chessmanType 棋子类型
      * @return 新坐标
      */
-    public Corrdinate moveStep(Corrdinate origin, Chessman.ChessmanType chessmanType) {
+    public Coordinate moveStep(Coordinate origin, Chessman.ChessmanType chessmanType) {
         return this.dir.moveStep(origin, this.len, chessmanType);
     }
 
@@ -170,8 +170,8 @@ public enum Step {
 
         abstract int moveY(int yOrigin, int lenth);
 
-        public Corrdinate moveStep(Corrdinate origin, int lenth, Chessman.ChessmanType chessmanType) {
-            return Corrdinate.getInstance(moveX(origin.getX_coordinate(), lenth + chessmanType.getWidth() - 1), moveY(origin.getY_coordinate(), lenth + chessmanType.getHeight() - 1));
+        public Coordinate moveStep(Coordinate origin, int lenth, Chessman.ChessmanType chessmanType) {
+            return Coordinate.getInstance(moveX(origin.getX_coordinate(), lenth + chessmanType.getWidth() - 1), moveY(origin.getY_coordinate(), lenth + chessmanType.getHeight() - 1));
         }
     }
 }

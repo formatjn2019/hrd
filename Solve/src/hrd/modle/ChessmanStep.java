@@ -20,6 +20,11 @@ public class ChessmanStep {
         this.spaceChanged = spaceChanged;
     }
 
+    /**
+     * 预先填充所有的棋子步骤到三维数组中缓存
+     *
+     * @return  填充完成的三维数组
+     */
     private static ChessmanStep[][][] initAllChessmanSteps() {
         ChessmanStep[][][] result = new ChessmanStep[SpaceChanged.values().length][][];
         for (int i = 0; i < SpaceChanged.values().length; i++) {
@@ -68,19 +73,22 @@ public class ChessmanStep {
                 '}';
     }
 
+    /**
+     * 空格移动的枚举类型
+     */
     public enum SpaceChanged {
         //只移动第一个空格
         SP1() {
             @Override
-            public Corrdinate moveSpace2(Step step, Corrdinate corrdinate, Chessman.ChessmanType chessmanType) {
-                return corrdinate;
+            public Coordinate moveSpace2(Step step, Coordinate coordinate, Chessman.ChessmanType chessmanType) {
+                return coordinate;
             }
         },
         //只移动第二个空格
         SP2 {
             @Override
-            public Corrdinate moveSpace1(Step step, Corrdinate corrdinate, Chessman.ChessmanType chessmanType) {
-                return corrdinate;
+            public Coordinate moveSpace1(Step step, Coordinate coordinate, Chessman.ChessmanType chessmanType) {
+                return coordinate;
             }
         },
         //移动两个空格（宽为2）
@@ -90,22 +98,22 @@ public class ChessmanStep {
         //忽略厚度，用于移动两步的情况
         SP21 {
             @Override
-            public Corrdinate moveSpace1(Step step, Corrdinate corrdinate, Chessman.ChessmanType chessmanType) {
-                return step.moveStep(corrdinate);
+            public Coordinate moveSpace1(Step step, Coordinate coordinate, Chessman.ChessmanType chessmanType) {
+                return step.moveStep(coordinate);
             }
 
             @Override
-            public Corrdinate moveSpace2(Step step, Corrdinate corrdinate, Chessman.ChessmanType chessmanType) {
-                return step.moveStep(corrdinate);
+            public Coordinate moveSpace2(Step step, Coordinate coordinate, Chessman.ChessmanType chessmanType) {
+                return step.moveStep(coordinate);
             }
         };
 
-        public Corrdinate moveSpace1(Step step, Corrdinate corrdinate, Chessman.ChessmanType chessmanType) {
-            return step.moveStep(corrdinate, chessmanType);
+        public Coordinate moveSpace1(Step step, Coordinate coordinate, Chessman.ChessmanType chessmanType) {
+            return step.moveStep(coordinate, chessmanType);
         }
 
-        public Corrdinate moveSpace2(Step step, Corrdinate corrdinate, Chessman.ChessmanType chessmanType) {
-            return step.moveStep(corrdinate, chessmanType);
+        public Coordinate moveSpace2(Step step, Coordinate coordinate, Chessman.ChessmanType chessmanType) {
+            return step.moveStep(coordinate, chessmanType);
         }
     }
 }

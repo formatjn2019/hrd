@@ -1,26 +1,26 @@
 package hrd.modle;
 
-public class Corrdinate {
+public class Coordinate {
 
     //通过静态数组生成减少判断时间
     public static final int X_MAX_VALUE = 4;
     public static final int Y_MAX_VALUE = 5;
-    private static final Corrdinate[][] ALL_CORRDINATES = initAllCorrdinates();
+    private static final Coordinate[][] ALL_COORDINATES = initAllCoordinates();
     private final byte x_coordinate;
     private final byte y_coordinate;
 
 
-    private Corrdinate(int x_coordinate, int y_coordinate) {
+    private Coordinate(int x_coordinate, int y_coordinate) {
         this.x_coordinate = (byte) x_coordinate;
         this.y_coordinate = (byte) y_coordinate;
     }
 
-    private static Corrdinate[][] initAllCorrdinates() {
-        Corrdinate[][] result = new Corrdinate[Corrdinate.X_MAX_VALUE][];
+    private static Coordinate[][] initAllCoordinates() {
+        Coordinate[][] result = new Coordinate[Coordinate.X_MAX_VALUE][];
         for (int i = 0; i < X_MAX_VALUE; i++) {
-            result[i] = new Corrdinate[Corrdinate.Y_MAX_VALUE];
+            result[i] = new Coordinate[Coordinate.Y_MAX_VALUE];
             for (int j = 0; j < Y_MAX_VALUE; j++) {
-                result[i][j] = new Corrdinate(i, j);
+                result[i][j] = new Coordinate(i, j);
             }
         }
         return result;
@@ -33,8 +33,8 @@ public class Corrdinate {
      * @param y 纵坐标
      * @return 返回已生成的坐标
      */
-    public static Corrdinate getInstance(int x, int y) {
-        return ALL_CORRDINATES[x][y];
+    public static Coordinate getInstance(int x, int y) {
+        return ALL_COORDINATES[x][y];
     }
 
     public byte getX_coordinate() {

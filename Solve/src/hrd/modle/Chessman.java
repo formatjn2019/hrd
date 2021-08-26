@@ -3,21 +3,21 @@ package hrd.modle;
 import static hrd.modle.Chessman.ChessmanType.*;
 
 public enum Chessman {
-    曹操('a', CAO),
-    关羽1('b', HENG),
-    关羽2('b', SHU),
-    张飞1('c', HENG),
-    张飞2('c', SHU),
-    赵云1('d', HENG),
-    赵云2('d', SHU),
-    马超1('e', HENG),
-    马超2('e', SHU),
-    黄忠1('f', HENG),
-    黄忠2('f', SHU),
-    兵1('g', BING),
-    兵2('h', BING),
-    兵3('i', BING),
-    兵4('j', BING);
+    CAO_CAO('a', BIG),
+    GUAN_YU_HORIZONTAL('b', HORIZONTAL),
+    GUAN_YU_VERTICAL('b', VERTICAL),
+    ZHANG_FEI_HORIZONTAL('c', HORIZONTAL),
+    ZHANG_FEI_VERTICAL('c', VERTICAL),
+    ZHAO_YUN_HORIZONTAL('d', HORIZONTAL),
+    ZHAO_YUN_VERTICAL('d', VERTICAL),
+    MA_CHAO_HORIZONTAL('e', HORIZONTAL),
+    MA_CHAO_VERTICAL('e', VERTICAL),
+    HUANG_ZHONG_HORIZONTAL('f', HORIZONTAL),
+    HUANG_ZHONG_VERTICAL('f', VERTICAL),
+    BING1('g', SMALL),
+    BING2('h', SMALL),
+    BING3('i', SMALL),
+    BING4('j', SMALL);
 
 
     private final char id;
@@ -43,16 +43,16 @@ public enum Chessman {
      */
     public static Chessman getInstanceByID(char id, ChessmanType chessmanType) {
         return switch (id) {
-            case 'a' -> 曹操;
-            case 'b' -> chessmanType == HENG ? 关羽1 : 关羽2;
-            case 'c' -> chessmanType == HENG ? 张飞1 : 张飞2;
-            case 'd' -> chessmanType == HENG ? 赵云1 : 赵云2;
-            case 'e' -> chessmanType == HENG ? 马超1 : 马超2;
-            case 'f' -> chessmanType == HENG ? 黄忠1 : 黄忠2;
-            case 'g' -> 兵1;
-            case 'h' -> 兵2;
-            case 'i' -> 兵3;
-            case 'j' -> 兵4;
+            case 'a' -> CAO_CAO;
+            case 'b' -> chessmanType == HORIZONTAL ? GUAN_YU_HORIZONTAL : GUAN_YU_VERTICAL;
+            case 'c' -> chessmanType == HORIZONTAL ? ZHANG_FEI_HORIZONTAL : ZHANG_FEI_VERTICAL;
+            case 'd' -> chessmanType == HORIZONTAL ? ZHAO_YUN_HORIZONTAL : ZHAO_YUN_VERTICAL;
+            case 'e' -> chessmanType == HORIZONTAL ? MA_CHAO_HORIZONTAL : MA_CHAO_VERTICAL;
+            case 'f' -> chessmanType == HORIZONTAL ? HUANG_ZHONG_HORIZONTAL : HUANG_ZHONG_VERTICAL;
+            case 'g' -> BING1;
+            case 'h' -> BING2;
+            case 'i' -> BING3;
+            case 'j' -> BING4;
             default -> null;
         };
     }
@@ -66,10 +66,14 @@ public enum Chessman {
     }
 
     public enum ChessmanType {
-        CAO(2, 2),
-        HENG(2, 1),
-        SHU(1, 2),
-        BING(1, 1);
+        //大棋子
+        BIG(2, 2),
+        //横向
+        HORIZONTAL(2, 1),
+        //纵向
+        VERTICAL(1, 2),
+        //小棋子
+        SMALL(1, 1);
         private final byte width;
         private final byte height;
 

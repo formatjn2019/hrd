@@ -3,7 +3,7 @@ package hrd.controller;
 import hrd.modle.Chessboard;
 import hrd.modle.Chessman;
 import hrd.modle.ChessmanWithCoordinate;
-import hrd.modle.Corrdinate;
+import hrd.modle.Coordinate;
 
 import java.util.EnumMap;
 import java.util.HashSet;
@@ -27,7 +27,7 @@ public class CreateAllChessboard {
         }
         //初始化棋子数组
         for (int i = 0; i < 10; i++) {
-            chessmans[i] = Chessman.getInstanceByID((char) ('a' + i), types[i] ? Chessman.ChessmanType.HENG : Chessman.ChessmanType.SHU);
+            chessmans[i] = Chessman.getInstanceByID((char) ('a' + i), types[i] ? Chessman.ChessmanType.HORIZONTAL : Chessman.ChessmanType.VERTICAL);
         }
         Set<Chessboard> resultSet = new HashSet<>();
         calculateChessmans(resultSet, new ChessmanWithCoordinate[10], new char[5][4], chessmans, 0);
@@ -72,7 +72,7 @@ public class CreateAllChessboard {
                                 newchars[ty][tx] = chessmans[index].getId();
                             }
                         }
-                        chessmanWithCoordinates[index] = ChessmanWithCoordinate.getInstance(chessmans[index], Corrdinate.getInstance(x, y));
+                        chessmanWithCoordinates[index] = ChessmanWithCoordinate.getInstance(chessmans[index], Coordinate.getInstance(x, y));
                         calculateChessmans(resultSet, chessmanWithCoordinates, newchars, chessmans, index + 1);
                     }
                 }

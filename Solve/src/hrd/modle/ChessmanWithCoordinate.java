@@ -2,24 +2,30 @@ package hrd.modle;
 
 
 public class ChessmanWithCoordinate implements Comparable<ChessmanWithCoordinate> {
-    private static final ChessmanWithCoordinate[][][] ALL_CHESSMANWITHCORRDINATES = initAllChessmanWithCorrdinate();
+    //为了性能优化，预先生成所有带坐标的棋子放入三维数组中缓存
+    private static final ChessmanWithCoordinate[][][] ALL_CHESSMAN_WITH_COORDINATES = initAllChessmanWithCoordinate();
     private final Chessman chessman;
-    private final Corrdinate coordinate;
+    private final Coordinate coordinate;
 
 
-    private ChessmanWithCoordinate(Chessman chessman, Corrdinate coordinate) {
+    private ChessmanWithCoordinate(Chessman chessman, Coordinate coordinate) {
         this.chessman = chessman;
         this.coordinate = coordinate;
     }
 
-    private static ChessmanWithCoordinate[][][] initAllChessmanWithCorrdinate() {
-        ChessmanWithCoordinate[][][] result = new ChessmanWithCoordinate[Corrdinate.X_MAX_VALUE][][];
-        for (int i = 0; i < Corrdinate.X_MAX_VALUE; i++) {
-            result[i] = new ChessmanWithCoordinate[Corrdinate.Y_MAX_VALUE][];
-            for (int j = 0; j < Corrdinate.Y_MAX_VALUE; j++) {
+    /**
+     * 计算所有包含坐标的棋子
+     *
+     * @return 返回分别以横坐标，纵坐标，棋子索引为索引的三维数组
+     */
+    private static ChessmanWithCoordinate[][][] initAllChessmanWithCoordinate() {
+        ChessmanWithCoordinate[][][] result = new ChessmanWithCoordinate[Coordinate.X_MAX_VALUE][][];
+        for (int i = 0; i < Coordinate.X_MAX_VALUE; i++) {
+            result[i] = new ChessmanWithCoordinate[Coordinate.Y_MAX_VALUE][];
+            for (int j = 0; j < Coordinate.Y_MAX_VALUE; j++) {
                 result[i][j] = new ChessmanWithCoordinate[Chessman.values().length];
                 for (int k = 0; k < Chessman.values().length; k++) {
-                    result[i][j][k] = new ChessmanWithCoordinate(Chessman.values()[k], Corrdinate.getInstance(i, j));
+                    result[i][j][k] = new ChessmanWithCoordinate(Chessman.values()[k], Coordinate.getInstance(i, j));
                 }
             }
         }
@@ -30,11 +36,11 @@ public class ChessmanWithCoordinate implements Comparable<ChessmanWithCoordinate
      * 获取缓存的棋子或者生成新的棋子
      *
      * @param chessman   棋子类型
-     * @param corrdinate 坐标
+     * @param coordinate 坐标
      * @return 返回缓存的棋子
      */
-    public static ChessmanWithCoordinate getInstance(Chessman chessman, Corrdinate corrdinate) {
-        return ALL_CHESSMANWITHCORRDINATES[corrdinate.getX_coordinate()][corrdinate.getY_coordinate()][chessman.ordinal()];
+    public static ChessmanWithCoordinate getInstance(Chessman chessman, Coordinate coordinate) {
+        return ALL_CHESSMAN_WITH_COORDINATES[coordinate.getX_coordinate()][coordinate.getY_coordinate()][chessman.ordinal()];
     }
 
     @Override
