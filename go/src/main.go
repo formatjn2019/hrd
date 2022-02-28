@@ -15,7 +15,7 @@ func main() {
 
 	chessboard := hrd.CreateChessboard(9359138341900176)
 	for k, v := range chessboard.Chessmans {
-		fmt.Printf("%d\t%50s\t\t%64b\n", k, v, v.Hash())
+		fmt.Printf("%d %64b %s \n", k, v.Hash(), v)
 	}
-	println(chessboard.Hashcode())
+	fmt.Printf("  %64b", chessboard.Hashcode())
 }
