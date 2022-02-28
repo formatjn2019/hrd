@@ -1,1 +1,1 @@
-# hrd_java
+# hrd
