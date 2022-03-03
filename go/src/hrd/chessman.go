@@ -1,17 +1,19 @@
 package hrd
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // 棋子类型
 type Chessmantype struct {
-	chessType uint8
-	width     uint8
-	height    uint8
+	chessType int8
+	width     int8
+	height    int8
 }
 
 //棋子
 type Chessman struct {
-	id uint8
+	id int8
 	Chessmantype
 }
 
@@ -49,14 +51,31 @@ func (c Chessman) String() string {
 
 //带有坐标的棋子
 type ChessmanInuse struct {
-	X, Y uint8
+	X, Y int8
 	*Chessman
 }
 
 //计算位置
-func (c ChessmanInuse) Hash() uint64 {
+func (c ChessmanInuse) HashCode() uint64 {
 	pos := uint64((c.X << 3) + c.Y)
 	return pos << (c.id*5 + 5)
+}
+
+//实现排序
+func (c ChessmanInuse) Value() int {
+	result := 0
+	if c.width == 2 {
+		result |= 2
+	}
+	if c.height == 2 {
+		result |= 1
+	}
+	return result<<5 | int(c.X)<<3 | int(c.Y)
+}
+
+//字符串
+func (c ChessmanInuse) String() string {
+	return fmt.Sprintf("%s X: %d Y: %d", c.Chessman, c.X, c.Y)
 }
 
 const (
@@ -98,7 +117,7 @@ const (
 
 type ChessDic map[int]*Chessman
 
-var Chessmans = ChessDic{
+var CHESSMANS = ChessDic{
 	CAO_CAO:      {id: CAO_CAO_ID, Chessmantype: Chessmantype{chessType: CAO_T, width: 2, height: 2}},
 	GUAN_YU:      {id: GUAN_YU_ID, Chessmantype: Chessmantype{chessType: HENG_T, width: 2, height: 1}},
 	GUAN_YU2:     {id: GUAN_YU_ID, Chessmantype: Chessmantype{chessType: SHU_T, width: 1, height: 2}},
@@ -116,48 +135,48 @@ var Chessmans = ChessDic{
 	BING4:        {id: BING4_ID, Chessmantype: Chessmantype{chessType: BING_T, width: 1, height: 1}},
 }
 
-func (cd ChessDic) GetChess(id uint8, dir bool) *Chessman {
+func (cd ChessDic) GetChess(id int8, dir bool) *Chessman {
 	switch id {
 	case BING4_ID:
-		return Chessmans[BING4]
+		return CHESSMANS[BING4]
 	case BING3_ID:
-		return Chessmans[BING3]
+		return CHESSMANS[BING3]
 	case BING2_ID:
-		return Chessmans[BING2]
+		return CHESSMANS[BING2]
 	case BING1_ID:
-		return Chessmans[BING1]
+		return CHESSMANS[BING1]
 	case HUANG_ZHONG_ID:
 		if dir {
-			return Chessmans[HUANG_ZHONG]
+			return CHESSMANS[HUANG_ZHONG]
 		} else {
-			return Chessmans[HUANG_ZHONG2]
+			return CHESSMANS[HUANG_ZHONG2]
 		}
 	case MA_CHAO_ID:
 		if dir {
-			return Chessmans[MA_CHAO]
+			return CHESSMANS[MA_CHAO]
 		} else {
-			return Chessmans[MA_CHAO2]
+			return CHESSMANS[MA_CHAO2]
 		}
 	case ZHAO_YUN_ID:
 		if dir {
-			return Chessmans[ZHAO_YUN]
+			return CHESSMANS[ZHAO_YUN]
 		} else {
-			return Chessmans[ZHAO_YUN2]
+			return CHESSMANS[ZHAO_YUN2]
 		}
 	case ZHANG_FEI_ID:
 		if dir {
-			return Chessmans[ZHANG_FEI]
+			return CHESSMANS[ZHANG_FEI]
 		} else {
-			return Chessmans[ZHANG_FEI2]
+			return CHESSMANS[ZHANG_FEI2]
 		}
 	case GUAN_YU_ID:
 		if dir {
-			return Chessmans[GUAN_YU]
+			return CHESSMANS[GUAN_YU]
 		} else {
-			return Chessmans[GUAN_YU2]
+			return CHESSMANS[GUAN_YU2]
 		}
 	case CAO_CAO_ID:
-		return Chessmans[CAO_CAO]
+		return CHESSMANS[CAO_CAO]
 	}
 	return nil
 }
