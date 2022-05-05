@@ -15,17 +15,10 @@ const (
 	SP21
 )
 
-func (s space) move(step Step) space {
-	disx, disy := step.getDistence()
-	disx = -disx
-	disy = -disy
-	return space{X: s.X + disx, Y: s.Y + disy}
-}
-
 type TreeNode struct {
-	parent *TreeNode
-	space1 space
-	space2 space
+	parentState uint64
+	space1      space
+	space2      space
 	*Chessboard
 }
 
@@ -90,11 +83,11 @@ func (parent *TreeNode) CreateTreeNodeByStep(step Step) TreeNode {
 		childrenSpace2.X, childrenSpace2.Y = childrenSpace2.X+tx, childrenSpace2.Y+ty
 	}
 
-	result := TreeNode{parent: parent, Chessboard: CreateChessboard(childrenState), space1: childrenSpace1, space2: childrenSpace2}
+	result := TreeNode{parentState: parent.State, Chessboard: CreateChessboard(childrenState), space1: childrenSpace1, space2: childrenSpace2}
 	return result
 }
 
-func (t TreeNode) GetAllStep() (resultSteps []Step) {
+func (t *TreeNode) GetAllStep() (resultSteps []Step) {
 	//矩阵
 	matrix := t.getMatrix()
 	spaces := []space{t.space1, t.space2}
@@ -120,33 +113,33 @@ func (t TreeNode) GetAllStep() (resultSteps []Step) {
 			//与当前方向呈直角为1
 			if lenth[i%2] == 1 {
 				//加入当前方向
-				resultSteps = append(resultSteps, Step{dir: dir((2*i + 4) % 8), spaceChanged: spaceChanged[currentSpace], ChessmanInuse: nowChessman})
+				resultSteps = append(resultSteps, Step{dir: dir((2*i + 4) % 8), spaceChanged: spaceChanged[currentSpace], Chessman: nowChessman})
 				//与当前方向平行也为1
 				if lenth[(i+1)%2] == 1 {
 					//同方向移动两步
 					if dirs[(i+2)%4] == -1 {
-						resultSteps = append(resultSteps, Step{dir: dir((i+2)%4 + 8), spaceChanged: spaceChanged[1-currentSpace], ChessmanInuse: nowChessman})
+						resultSteps = append(resultSteps, Step{dir: dir((i+2)%4 + 8), spaceChanged: spaceChanged[1-currentSpace], Chessman: nowChessman})
 
 					}
 					//判断逆时针45度方向
 					if dirs[(i+1)%4] == -1 {
-						resultSteps = append(resultSteps, Step{dir: dir((2*i + 3) % 8), spaceChanged: spaceChanged[1-currentSpace], ChessmanInuse: nowChessman})
+						resultSteps = append(resultSteps, Step{dir: dir((2*i + 3) % 8), spaceChanged: spaceChanged[1-currentSpace], Chessman: nowChessman})
 					}
 					//判断顺时针45度方向
 					if dirs[(i+3)%4] == -1 {
-						resultSteps = append(resultSteps, Step{dir: dir((2*i + 5) % 8), spaceChanged: spaceChanged[1-currentSpace], ChessmanInuse: nowChessman})
+						resultSteps = append(resultSteps, Step{dir: dir((2*i + 5) % 8), spaceChanged: spaceChanged[1-currentSpace], Chessman: nowChessman})
 					}
 				} else { //与当前平行方向为2
 					//同方向移动两步
 					if dirs[(i+2)%4] == -1 {
-						resultSteps = append(resultSteps, Step{dir: dir((i+2)%4 + 8), spaceChanged: SP21, ChessmanInuse: nowChessman})
+						resultSteps = append(resultSteps, Step{dir: dir((i+2)%4 + 8), spaceChanged: SP21, Chessman: nowChessman})
 					}
 				}
 
 			} else { //与当前方向呈直角为2
 				//判断顺时针90方向
 				if dirs[(i+1)%4] == -1 && spaces[1-currentSpace].searchChessmanId(&matrix, dir(2*i)) == current {
-					resultSteps = append(resultSteps, Step{dir: dir((2*i + 4) % 8), spaceChanged: SP12, ChessmanInuse: nowChessman})
+					resultSteps = append(resultSteps, Step{dir: dir((2*i + 4) % 8), spaceChanged: SP12, Chessman: nowChessman})
 				}
 			}
 		}

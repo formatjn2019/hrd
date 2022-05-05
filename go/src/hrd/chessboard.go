@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-type chessbox []ChessmanInuse
+type chessbox []Chessman
 
 type Chessboard struct {
 	Chessmans chessbox
@@ -19,16 +19,20 @@ type Chessboard struct {
 func (cb chessbox) Len() int {
 	return len(cb)
 }
+
+//交换
 func (cb chessbox) Swap(i, j int) {
 	cb[i], cb[j] = cb[j], cb[i]
 }
+
+//比较
 func (cb chessbox) Less(i, j int) bool {
 	return cb[i].Value() > cb[j].Value()
 }
 
 //复制
 func (cb chessbox) clone() chessbox {
-	result := make([]ChessmanInuse, 10)
+	result := make([]Chessman, 10)
 	copy(result, cb)
 	return result
 }
@@ -37,7 +41,7 @@ func (cb chessbox) clone() chessbox {
 //平面直角坐标系，X轴正方向2位，Y轴负方向3位
 //曹 关 张 赵 马 黄 兵1 兵2 兵3 兵4 横竖情况
 func CreateChessboard(state uint64) *Chessboard {
-	var result = &Chessboard{Chessmans: make([]ChessmanInuse, 10), State: state}
+	var result = &Chessboard{Chessmans: make([]Chessman, 10), State: state}
 	types := [10]bool{}
 	tempstate := state
 	for i := 4; i < 9; i++ {
@@ -49,7 +53,7 @@ func CreateChessboard(state uint64) *Chessboard {
 		tempstate >>= 3
 		x := tempstate & 0x3
 		tempstate >>= 2
-		result.Chessmans[i] = ChessmanInuse{X: int8(x), Y: int8(y), Chessman: CHESSMANS.GetChess(int8(i), types[i])}
+		result.Chessmans[i] = Chessman{X: int8(x), Y: int8(y), ChessmanType: CHESSMAN.GetChess(int8(i), types[i])}
 	}
 	return result
 }
@@ -74,9 +78,9 @@ func (c Chessboard) Hashcode() uint64 {
 }
 
 //计算镜像
-func calculateMirror(chessmans chessbox) (result uint64) {
+func calculateMirror(chessmans *chessbox) (result uint64) {
 	sort.Sort(chessmans)
-	for _, chessman := range chessmans {
+	for _, chessman := range *chessmans {
 		result = result<<5 | uint64(chessman.X)<<3 | uint64(chessman.Y)
 	}
 	return result
@@ -87,7 +91,8 @@ func (c Chessboard) GetMirror() uint64 {
 	if c.mirror != 0 {
 		return c.mirror
 	}
-	c.mirror = calculateMirror(c.Chessmans.clone())
+	cb := c.Chessmans.clone()
+	c.mirror = calculateMirror(&cb)
 	return c.mirror
 }
 
@@ -101,7 +106,7 @@ func (c Chessboard) GetAdjMirr() uint64 {
 	for index := range cbc {
 		cbc[index].X = 4 - cbc[index].width - cbc[index].X
 	}
-	c.adjMirr = calculateMirror(cbc)
+	c.adjMirr = calculateMirror(&cbc)
 	return c.adjMirr
 }
 

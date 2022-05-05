@@ -7,11 +7,11 @@ type dir int
 type Step struct {
 	dir
 	spaceChanged int
-	ChessmanInuse
+	Chessman
 }
 
 func (s Step) String() string {
-	return fmt.Sprintf("%v  %v  %d", s.ChessmanInuse, s.dir, s.spaceChanged)
+	return fmt.Sprintf("%v  %v  %d", s.Chessman, s.dir, s.spaceChanged)
 }
 
 func (d dir) String() string {
@@ -76,8 +76,8 @@ func (d dir) getDistence() (x, y int8) {
 	}
 }
 
-func (s Step) moveChessman() ChessmanInuse {
-	chessmanInuse := s.ChessmanInuse
+func (s Step) moveChessman() Chessman {
+	chessmanInuse := s.Chessman
 	disx, disy := s.getDistence()
 	chessmanInuse.X += disx
 	chessmanInuse.Y += disy
